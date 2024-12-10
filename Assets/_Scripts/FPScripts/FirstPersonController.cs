@@ -18,6 +18,10 @@ public class FirstPersonController : MonoBehaviour
 {
     private Rigidbody rb;
 
+
+    public Animator leftHandAnimator;
+    public Animator rightHandAnimator;
+
     #region Camera Movement Variables
 
     public Camera playerCamera;
@@ -155,6 +159,12 @@ public class FirstPersonController : MonoBehaviour
             crosshairObject.gameObject.SetActive(false);
         }
 
+        // Exemple d'activation d'autres HUD
+        foreach (var hud in GetComponentsInChildren<Canvas>())
+        {
+            hud.gameObject.SetActive(true); // Activer tous les éléments enfants de type Canvas
+        }
+
     }
 
     float camRotation;
@@ -184,6 +194,25 @@ public class FirstPersonController : MonoBehaviour
             transform.localEulerAngles = new Vector3(0, yaw, 0);
             playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
         }
+
+        if (Input.GetMouseButtonDown(0)) // Clic gauche
+        {
+            if (leftHandAnimator != null)
+            {
+                leftHandAnimator.SetTrigger("OnLeftClick");
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1)) // Clic droit
+        {
+            Debug.Log("Clic droit");
+            if (rightHandAnimator != null)
+            {
+                rightHandAnimator.SetTrigger("OnRightClick");
+                Debug.Log("La ya le trigger du droit");
+            }
+        }
+
 
         #region Camera Zoom
 
@@ -472,7 +501,7 @@ public class FirstPersonController : MonoBehaviour
 
 
 
-// Custom Editor
+/*// Custom Editor
 #if UNITY_EDITOR
     [CustomEditor(typeof(FirstPersonController)), InitializeOnLoadAttribute]
     public class FirstPersonControllerEditor : Editor
@@ -649,4 +678,4 @@ public class FirstPersonController : MonoBehaviour
 
 }
 
-#endif
+#endif*/
