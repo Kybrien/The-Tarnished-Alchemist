@@ -451,7 +451,7 @@ MonoBehaviour:
   holdPosLeft: {fileID: 562849445}
   holdPosRight: {fileID: 680941978}
   throwForce: 500
-  pickUpRange: 8
+  pickUpRange: 3
   animatorLeftHand: {fileID: 60889298}
   animatorRightHand: {fileID: 1230052734}
 --- !u!1 &410087039
@@ -1119,13 +1119,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: f23e5a2b7ae327848990ac520f0112e8,
         type: 3}
+      propertyPath: jumpPower
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4459864850019384740, guid: f23e5a2b7ae327848990ac520f0112e8,
+        type: 3}
       propertyPath: sprintFOV
       value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: f23e5a2b7ae327848990ac520f0112e8,
         type: 3}
       propertyPath: enableJump
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384740, guid: f23e5a2b7ae327848990ac520f0112e8,
         type: 3}
