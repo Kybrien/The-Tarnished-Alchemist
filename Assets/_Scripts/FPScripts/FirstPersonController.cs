@@ -172,24 +172,6 @@ public class FirstPersonController : MonoBehaviour
             playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
         }
 
-        if (Input.GetMouseButtonDown(0)) // Clic gauche
-        {
-            if (leftHandAnimator != null)
-            {
-                leftHandAnimator.SetTrigger("OnLeftClick");
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1)) // Clic droit
-        {
-            Debug.Log("Clic droit");
-            if (rightHandAnimator != null)
-            {
-                rightHandAnimator.SetTrigger("OnRightClick");
-                Debug.Log("La ya le trigger du droit");
-            }
-        }
-
         #endregion
 
         #region Sprint
