@@ -23,6 +23,10 @@ public class PickUpScript : MonoBehaviour
 
     private GameObject currentHoveredObject = null; // Object actuellement "hovered"
 
+    // UI Elements for hands
+    public GameObject leftHandElements;
+    public GameObject rightHandElements;
+
     #region Animation Holding
 
     public Animator animatorLeftHand;
@@ -38,8 +42,8 @@ public class PickUpScript : MonoBehaviour
     void Update()
     {
         HandleHover();
-        HandleInput(KeyCode.Mouse0, ref heldObjLeft, ref heldObjRbLeft, holdPosLeft, ref canDropLeft, animatorLeftHand);
-        HandleInput(KeyCode.Mouse1, ref heldObjRight, ref heldObjRbRight, holdPosRight, ref canDropRight, animatorRightHand);
+        HandleInput(KeyCode.Mouse0, ref heldObjLeft, ref heldObjRbLeft, holdPosLeft, ref canDropLeft, animatorLeftHand, leftHandElements);
+        HandleInput(KeyCode.Mouse1, ref heldObjRight, ref heldObjRbRight, holdPosRight, ref canDropRight, animatorRightHand, rightHandElements);
     }
 
     void HandleHover()
@@ -59,7 +63,7 @@ public class PickUpScript : MonoBehaviour
                 }
 
                 // Activer l'outline du nouvel objet
-                if (target.CompareTag("HoldableObject") && target != heldObjLeft && target != heldObjRight)
+                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) && target != heldObjLeft && target != heldObjRight)
                 {
                     EnableOutline(target);
                     currentHoveredObject = target;
@@ -83,7 +87,6 @@ public class PickUpScript : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = true;
-            Debug.Log($"Outline enabled on {obj.name}");
         }
     }
 
@@ -93,11 +96,10 @@ public class PickUpScript : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = false;
-            Debug.Log($"Outline disabled on {obj.name}");
         }
     }
 
-    private void HandleInput(KeyCode key, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, ref bool canDrop, Animator animator)
+    private void HandleInput(KeyCode key, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, ref bool canDrop, Animator animator, GameObject handElements)
     {
         if (Input.GetKeyDown(key))
         {
@@ -109,20 +111,44 @@ public class PickUpScript : MonoBehaviour
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
                     GameObject target = hit.transform.gameObject;
-                    if (target.CompareTag("HoldableObject"))
+
+                    // Gestion des PrimaryElements (duplication)
+                    if (target.CompareTag("PrimaryElement"))
+                    {
+                        // Instancier sans parent pour conserver l'échelle originale
+                        heldObj = Instantiate(target, holdPos.position, Quaternion.identity);
+
+                        // Forcer l'échelle globale de l'objet à celle de l'original
+                        heldObj.transform.localScale = target.transform.lossyScale;
+
+                        // Parentage après avoir défini l'échelle
+                        heldObj.transform.SetParent(holdPos, true);
+
+                        heldObjRb = heldObj.GetComponent<Rigidbody>();
+                        if (heldObjRb != null)
+                        {
+                            heldObjRb.isKinematic = true;
+                        }
+                        heldObj.layer = LayerNumber; // Assurez-vous que la copie a le bon layer
+                        UpdateUI(handElements, target.name);
+                    }
+                    // Gestion des HoldableObjects (pickup normal)
+                    else if (target.CompareTag("HoldableObject"))
                     {
                         PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
-                        DisableOutline(target); // Désactiver l'outline lorsqu'on prend l'objet
-                        currentHoveredObject = null; // Réinitialiser le hover
+                        UpdateUI(handElements, ""); // Réinitialise l'UI si ce n'est pas un élément primaire
                     }
+
+                    DisableOutline(target); // Désactiver l'outline lorsqu'on prend l'objet
+                    currentHoveredObject = null; // Réinitialiser le hover
                 }
             }
             else
             {
                 if (canDrop)
                 {
-                    StopClipping(heldObj);
                     DropObject(ref heldObj, ref heldObjRb, animator);
+                    UpdateUI(handElements, ""); // Réinitialiser l'UI après un drop
                 }
             }
         }
@@ -132,8 +158,8 @@ public class PickUpScript : MonoBehaviour
             MoveObject(heldObj, holdPos);
             if (Input.GetKeyDown(KeyCode.Q) && canDrop)
             {
-                StopClipping(heldObj);
                 ThrowObject(ref heldObj, ref heldObjRb, animator);
+                UpdateUI(handElements, ""); // Réinitialiser l'UI après un lancer
             }
         }
     }
@@ -155,12 +181,16 @@ public class PickUpScript : MonoBehaviour
 
     void DropObject(ref GameObject heldObj, ref Rigidbody heldObjRb, Animator animator)
     {
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0;
-        heldObjRb.isKinematic = false;
-        heldObj.transform.parent = null;
-        heldObj = null;
-        animator.SetBool("isHolding", false); // Désactive l'animation de prise en main
+        if (heldObj != null && heldObjRb != null)
+        {
+            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+            heldObj.layer = 0;
+            heldObjRb.isKinematic = false;
+            heldObj.transform.parent = null;
+            heldObj = null;
+            heldObjRb = null;
+            animator.SetBool("isHolding", false); // Désactive l'animation de prise en main
+        }
     }
 
     void MoveObject(GameObject heldObj, Transform holdPos)
@@ -170,23 +200,33 @@ public class PickUpScript : MonoBehaviour
 
     void ThrowObject(ref GameObject heldObj, ref Rigidbody heldObjRb, Animator animator)
     {
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
-        heldObj.layer = 0;
-        heldObjRb.isKinematic = false;
-        heldObj.transform.parent = null;
-        heldObjRb.AddForce(transform.forward * throwForce);
-        heldObj = null;
-        animator.SetBool("isHolding", false); // Désactive l'animation de prise en main
+        if (heldObj != null && heldObjRb != null)
+        {
+            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+            heldObj.layer = 0;
+            heldObjRb.isKinematic = false;
+            heldObj.transform.parent = null;
+            heldObjRb.AddForce(transform.forward * throwForce);
+            heldObj = null;
+            heldObjRb = null;
+            animator.SetBool("isHolding", false); // Désactive l'animation de prise en main
+        }
     }
 
-    void StopClipping(GameObject heldObj)
+    void UpdateUI(GameObject handElements, string elementName)
     {
-        var clipRange = Vector3.Distance(heldObj.transform.position, transform.position);
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), clipRange);
-        if (hits.Length > 1)
+        foreach (Transform child in handElements.transform)
         {
-            heldObj.transform.position = transform.position + new Vector3(0f, -0.5f, 0f);
+            child.gameObject.SetActive(false);
+        }
+
+        if (!string.IsNullOrEmpty(elementName))
+        {
+            Transform uiElement = handElements.transform.Find(elementName);
+            if (uiElement != null)
+            {
+                uiElement.gameObject.SetActive(true);
+            }
         }
     }
 }
