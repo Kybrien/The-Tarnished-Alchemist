@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - HoldableObject
+  - PrimaryElement
   layers:
   - Default
   - TransparentFX
