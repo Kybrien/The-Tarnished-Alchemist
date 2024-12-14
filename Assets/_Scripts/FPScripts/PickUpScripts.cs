@@ -287,5 +287,4 @@ public class PickUpScript : MonoBehaviour
             obj.GetComponent<Rigidbody>().isKinematic = true;
         }
     }
-
 }
