@@ -88,6 +88,12 @@ public class PickUpScript : MonoBehaviour
         {
             outline.enabled = true;
         }
+
+        HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
+        if (hoverCanvas != null)
+        {
+            hoverCanvas.OnHoverEnter();
+        }
     }
 
     void DisableOutline(GameObject obj)
@@ -96,6 +102,12 @@ public class PickUpScript : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = false;
+        }
+
+        HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
+        if (hoverCanvas != null)
+        {
+            hoverCanvas.OnHoverExit();
         }
     }
 

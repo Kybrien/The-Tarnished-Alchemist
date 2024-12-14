@@ -258,9 +258,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5912966370852180622}
-  - component: {fileID: 3406915301614900994}
   - component: {fileID: 2783355020446694684}
   - component: {fileID: 8974521072219889289}
+  - component: {fileID: 8656989209960969730}
   m_Layer: 0
   m_Name: Armoire
   m_TagString: Untagged
@@ -288,37 +288,6 @@ Transform:
   - {fileID: 7464848948566431235}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &3406915301614900994
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5434841189610079332}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.221129, y: 1.215847, z: 0}
-  m_Size: 2.644695
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.2988115
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4993434773663957575}
-  - screenRelativeHeight: 0.14590763
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 719532763465158308}
-  - screenRelativeHeight: 0.04571578
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2343347862665853294}
-  - screenRelativeHeight: 0.009763315
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 7203327331107982036}
-  m_Enabled: 1
 --- !u!65 &2783355020446694684
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -362,6 +331,27 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300008, guid: abc00000000003597003980573777403, type: 3}
+--- !u!65 &8656989209960969730
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5434841189610079332}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.66, y: 1, z: 0.7}
+  m_Center: {x: 0.42, y: 0, z: 0}
 --- !u!1 &9192726392021209866
 GameObject:
   m_ObjectHideFlags: 0
