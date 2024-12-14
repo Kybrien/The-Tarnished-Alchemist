@@ -418,7 +418,7 @@ MonoBehaviour:
   _useLightColor: 0
   _useLightDirection: 0
   _directionalLight: {fileID: 0}
-  _liquidColor1: {r: 0, g: 1, b: 0.42763233, a: 0.1}
+  _liquidColor1: {r: 0, g: 0.9009993, b: 1, a: 0.1}
   _liquidScale1: 1
   _liquidColor2: {r: 0, g: 0.16568494, b: 1, a: 0.3}
   _liquidScale2: 5
@@ -483,7 +483,7 @@ MonoBehaviour:
   _backDepthBias: 0
   _rotationLevelCompensation: 0
   _ignoreGravity: 0
-  _reactToForces: 0
+  _reactToForces: 1
   _extentsScale: {x: 1, y: 1.71, z: 1}
   _noiseVariation: 1
   _allowViewFromInside: 0

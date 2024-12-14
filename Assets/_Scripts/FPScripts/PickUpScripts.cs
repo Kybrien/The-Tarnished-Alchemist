@@ -141,7 +141,13 @@ public class PickUpScript : MonoBehaviour
                         {
                             heldObjRb.isKinematic = true;
                         }
+
                         heldObj.layer = LayerNumber; // Assurez-vous que la copie a le bon layer
+
+                        // Activer l'animation de prise en main
+                        animator.SetBool("isHolding", true);
+
+                        // Mettre à jour l'UI
                         UpdateUI(handElements, target.name);
                     }
                     // Gestion des HoldableObjects (pickup normal)
@@ -241,4 +247,45 @@ public class PickUpScript : MonoBehaviour
             }
         }
     }
+
+    public GameObject GetHeldObjLeft()
+    {
+        return heldObjLeft;
+    }
+
+    public void SetHeldObjLeft(GameObject obj)
+    {
+        if (heldObjLeft != null)
+        {
+            DropObject(ref heldObjLeft, ref heldObjRbLeft, animatorLeftHand);
+        }
+        heldObjLeft = obj;
+        if (obj != null)
+        {
+            obj.transform.SetParent(holdPosLeft);
+            obj.transform.localPosition = Vector3.zero;
+            obj.GetComponent<Rigidbody>().isKinematic = true;
+        }
+    }
+
+    public GameObject GetHeldObjRight()
+    {
+        return heldObjRight;
+    }
+
+    public void SetHeldObjRight(GameObject obj)
+    {
+        if (heldObjRight != null)
+        {
+            DropObject(ref heldObjRight, ref heldObjRbRight, animatorRightHand);
+        }
+        heldObjRight = obj;
+        if (obj != null)
+        {
+            obj.transform.SetParent(holdPosRight);
+            obj.transform.localPosition = Vector3.zero;
+            obj.GetComponent<Rigidbody>().isKinematic = true;
+        }
+    }
+
 }
