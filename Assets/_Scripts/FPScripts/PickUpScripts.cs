@@ -88,6 +88,12 @@ public class PickUpScript : MonoBehaviour
         {
             outline.enabled = true;
         }
+
+        HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
+        if (hoverCanvas != null)
+        {
+            hoverCanvas.OnHoverEnter();
+        }
     }
 
     void DisableOutline(GameObject obj)
@@ -96,6 +102,12 @@ public class PickUpScript : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = false;
+        }
+
+        HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
+        if (hoverCanvas != null)
+        {
+            hoverCanvas.OnHoverExit();
         }
     }
 
@@ -112,33 +124,32 @@ public class PickUpScript : MonoBehaviour
                 {
                     GameObject target = hit.transform.gameObject;
 
-                    // Gestion des PrimaryElements (duplication)
+                    // Gestion des PrimaryElements
                     if (target.CompareTag("PrimaryElement"))
                     {
-                        // Instancier sans parent pour conserver l'échelle originale
-                        heldObj = Instantiate(target, holdPos.position, Quaternion.identity);
-
-                        // Forcer l'échelle globale de l'objet à celle de l'original
-                        heldObj.transform.localScale = target.transform.lossyScale;
-
-                        // Parentage après avoir défini l'échelle
-                        heldObj.transform.SetParent(holdPos, true);
-
-                        heldObjRb = heldObj.GetComponent<Rigidbody>();
-                        if (heldObjRb != null)
+                        if (target.transform.parent == null) // L'objet est déjà dans la scène, on le récupère tel quel
                         {
-                            heldObjRb.isKinematic = true;
+                            PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
                         }
+                        else // L'objet doit être dupliqué (cas normal)
+                        {
+                            heldObj = Instantiate(target, holdPos.position, Quaternion.identity);
 
-                        heldObj.layer = LayerNumber; // Assurez-vous que la copie a le bon layer
+                            heldObj.transform.localScale = target.transform.lossyScale;
+                            heldObj.transform.SetParent(holdPos, true);
 
-                        // Activer l'animation de prise en main
-                        animator.SetBool("isHolding", true);
+                            heldObjRb = heldObj.GetComponent<Rigidbody>();
+                            if (heldObjRb != null)
+                            {
+                                heldObjRb.isKinematic = true;
+                            }
 
-                        // Mettre à jour l'UI
-                        UpdateUI(handElements, target.name);
+                            heldObj.layer = LayerNumber;
+                            animator.SetBool("isHolding", true);
+                            UpdateUI(handElements, target.name);
+                        }
                     }
-                    // Gestion des HoldableObjects (pickup normal)
+                    // Gestion des HoldableObjects (objets normaux)
                     else if (target.CompareTag("HoldableObject"))
                     {
                         PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
@@ -169,6 +180,7 @@ public class PickUpScript : MonoBehaviour
             }
         }
     }
+
 
     void PickUpObject(GameObject pickUpObj, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, Animator animator)
     {
