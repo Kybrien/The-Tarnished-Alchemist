@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickUpScript : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class PickUpScript : MonoBehaviour
 
     public float throwForce = 500f;
     public float pickUpRange = 5f;
+
+    public GameObject inventoryCanvas; // Canvas d'inventaire
 
     private GameObject heldObjLeft; // Objet tenu par la main gauche
     private GameObject heldObjRight; // Objet tenu par la main droite
@@ -21,22 +24,24 @@ public class PickUpScript : MonoBehaviour
 
     private int LayerNumber;
 
-    private GameObject currentHoveredObject = null; // Object actuellement "hovered"
+    private GameObject currentHoveredObject = null; // Objet actuellement "hovered"
 
     // UI Elements for hands
     public GameObject leftHandElements;
     public GameObject rightHandElements;
 
     #region Animation Holding
-
     public Animator animatorLeftHand;
     public Animator animatorRightHand;
-
     #endregion
+
+    private bool isInventoryOpen = false; // État d'ouverture de l'inventaire
 
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("CanBeHold");
+        inventoryCanvas.SetActive(false); // Cache l'inventaire au départ
+        Cursor.visible = false;
     }
 
     void Update()
@@ -44,6 +49,22 @@ public class PickUpScript : MonoBehaviour
         HandleHover();
         HandleInput(KeyCode.Mouse0, ref heldObjLeft, ref heldObjRbLeft, holdPosLeft, ref canDropLeft, animatorLeftHand, leftHandElements);
         HandleInput(KeyCode.Mouse1, ref heldObjRight, ref heldObjRbRight, holdPosRight, ref canDropRight, animatorRightHand, rightHandElements);
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleInventory();
+        }
+    }
+
+    void ToggleInventory()
+    {
+        isInventoryOpen = !isInventoryOpen;
+        inventoryCanvas.SetActive(isInventoryOpen);
+        Cursor.lockState = isInventoryOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isInventoryOpen;
+
+        // Active/désactive les contrôles en fonction de l'état de l'inventaire
+        SetPlayerControls(!isInventoryOpen);
     }
 
     void HandleHover()
@@ -53,28 +74,26 @@ public class PickUpScript : MonoBehaviour
         {
             GameObject target = hit.collider.gameObject;
 
-            // Si on regarde un nouvel objet
             if (target != currentHoveredObject)
             {
-                // Désactiver l'outline de l'ancien objet
                 if (currentHoveredObject != null)
                 {
                     DisableOutline(currentHoveredObject);
                 }
 
-                // Activer l'outline du nouvel objet
-                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) && target != heldObjLeft && target != heldObjRight)
+                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) &&
+                    target != heldObjLeft && target != heldObjRight)
                 {
                     EnableOutline(target);
                     currentHoveredObject = target;
                 }
                 else
                 {
-                    currentHoveredObject = null; // Aucun hover actif
+                    currentHoveredObject = null;
                 }
             }
         }
-        else if (currentHoveredObject != null) // Si on ne regarde plus rien
+        else if (currentHoveredObject != null)
         {
             DisableOutline(currentHoveredObject);
             currentHoveredObject = null;
@@ -84,34 +103,22 @@ public class PickUpScript : MonoBehaviour
     void EnableOutline(GameObject obj)
     {
         Outline outline = obj.GetComponent<Outline>();
-        if (outline != null)
-        {
-            outline.enabled = true;
-        }
+        if (outline != null) outline.enabled = true;
 
         HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
-        if (hoverCanvas != null)
-        {
-            hoverCanvas.OnHoverEnter();
-        }
+        if (hoverCanvas != null) hoverCanvas.OnHoverEnter();
     }
 
     void DisableOutline(GameObject obj)
     {
         Outline outline = obj.GetComponent<Outline>();
-        if (outline != null)
-        {
-            outline.enabled = false;
-        }
+        if (outline != null) outline.enabled = false;
 
         HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
-        if (hoverCanvas != null)
-        {
-            hoverCanvas.OnHoverExit();
-        }
+        if (hoverCanvas != null) hoverCanvas.OnHoverExit();
     }
 
-    private void HandleInput(KeyCode key, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, ref bool canDrop, Animator animator, GameObject handElements)
+    void HandleInput(KeyCode key, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, ref bool canDrop, Animator animator, GameObject handElements)
     {
         if (Input.GetKeyDown(key))
         {
@@ -126,38 +133,33 @@ public class PickUpScript : MonoBehaviour
 
                     if (target.CompareTag("PrimaryElement"))
                     {
-                        if (target.transform.parent == null) // L'objet est déjà dans la scène
+                        if (target.transform.parent == null)
                         {
                             PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
                         }
-                        else // L'objet doit être instancié
+                        else
                         {
                             heldObj = Instantiate(target, holdPos.position, Quaternion.identity);
-                            heldObj.name = CleanName(target.name); // Renomme pour éviter "(Clone)"
+                            heldObj.name = CleanName(target.name);
                             heldObj.transform.localScale = target.transform.lossyScale;
                             heldObj.transform.SetParent(holdPos, true);
 
                             heldObjRb = heldObj.GetComponent<Rigidbody>();
-                            if (heldObjRb != null)
-                            {
-                                heldObjRb.isKinematic = true;
-                            }
+                            if (heldObjRb != null) heldObjRb.isKinematic = true;
 
                             heldObj.layer = LayerNumber;
                             animator.SetBool("isHolding", true);
                             UpdateUI(holdPos == holdPosLeft ? leftHandElements : rightHandElements, heldObj.name);
                         }
                     }
-
-                    // Gestion des HoldableObjects (objets normaux)
                     else if (target.CompareTag("HoldableObject"))
                     {
                         PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
-                        UpdateUI(handElements, ""); // Réinitialise l'UI si ce n'est pas un élément primaire
+                        UpdateUI(handElements, "");
                     }
 
-                    DisableOutline(target); // Désactiver l'outline lorsqu'on prend l'objet
-                    currentHoveredObject = null; // Réinitialiser le hover
+                    DisableOutline(target);
+                    currentHoveredObject = null;
                 }
             }
             else
@@ -165,7 +167,7 @@ public class PickUpScript : MonoBehaviour
                 if (canDrop)
                 {
                     DropObject(ref heldObj, ref heldObjRb, animator);
-                    UpdateUI(handElements, ""); // Réinitialiser l'UI après un drop
+                    UpdateUI(handElements, "");
                 }
             }
         }
@@ -176,33 +178,27 @@ public class PickUpScript : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q) && canDrop)
             {
                 ThrowObject(ref heldObj, ref heldObjRb, animator);
-                UpdateUI(handElements, ""); // Réinitialiser l'UI après un lancer
+                UpdateUI(handElements, "");
             }
         }
     }
-
 
     void PickUpObject(GameObject pickUpObj, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, Animator animator)
     {
         if (pickUpObj.GetComponent<Rigidbody>())
         {
             heldObj = pickUpObj;
-            heldObj.name = CleanName(pickUpObj.name); // Renomme immédiatement pour éviter "(Clone)"
+            heldObj.name = CleanName(pickUpObj.name);
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
-            heldObjRb.transform.parent = holdPos; // Positionner dans la main
+            heldObjRb.transform.parent = holdPos;
             heldObj.layer = LayerNumber;
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
 
-            animator.SetBool("isHolding", true); // Active l'animation
+            animator.SetBool("isHolding", true);
             UpdateUI(holdPos == holdPosLeft ? leftHandElements : rightHandElements, heldObj.name);
         }
     }
-
-
-
-
-
 
     void DropObject(ref GameObject heldObj, ref Rigidbody heldObjRb, Animator animator)
     {
@@ -214,7 +210,7 @@ public class PickUpScript : MonoBehaviour
             heldObj.transform.parent = null;
             heldObj = null;
             heldObjRb = null;
-            animator.SetBool("isHolding", false); // Désactive l'animation de prise en main
+            animator.SetBool("isHolding", false);
         }
     }
 
@@ -234,19 +230,17 @@ public class PickUpScript : MonoBehaviour
             heldObjRb.AddForce(transform.forward * throwForce);
             heldObj = null;
             heldObjRb = null;
-            animator.SetBool("isHolding", false); // Désactive l'animation de prise en main
+            animator.SetBool("isHolding", false);
         }
     }
 
     void UpdateUI(GameObject handElements, string elementName)
     {
-        // Désactive tous les enfants
         foreach (Transform child in handElements.transform)
         {
             child.gameObject.SetActive(false);
         }
 
-        // Active l'élément correspondant, s'il existe
         if (!string.IsNullOrEmpty(elementName))
         {
             Transform uiElement = handElements.transform.Find(elementName);
@@ -261,16 +255,147 @@ public class PickUpScript : MonoBehaviour
         }
     }
 
+    public void OnClickHandSlot(GameObject handSlotButton)
+    {
+        string elementName = handSlotButton.name;
+        Debug.Log($"HandSlot clicked: {elementName}");
+
+        bool isLeftHand = handSlotButton.transform.IsChildOf(leftHandElements.transform);
+        Debug.Log($"Is Left Hand: {isLeftHand}");
+
+        GameObject targetSlot = FindEmptyInventorySlot();
+        if (targetSlot == null)
+        {
+            Debug.LogWarning("No empty inventory slot found.");
+            return;
+        }
+
+        // Activer l'élément dans l'inventaire
+        GameObject elementInInventory = targetSlot.transform.Find(elementName)?.gameObject;
+        if (elementInInventory != null)
+        {
+            elementInInventory.SetActive(true);
+            Debug.Log($"Activated {elementName} in inventory slot.");
+        }
+        else
+        {
+            Debug.LogWarning($"Element {elementName} not found in inventory slot.");
+        }
+
+        // Désactiver l'élément dans la main
+        GameObject handElements = isLeftHand ? leftHandElements : rightHandElements;
+        GameObject elementInHand = handElements.transform.Find(elementName)?.gameObject;
+        if (elementInHand != null)
+        {
+            elementInHand.SetActive(false);
+            Debug.Log($"Deactivated {elementName} in hand.");
+        }
+        else
+        {
+            Debug.LogWarning($"Element {elementName} not found in hand.");
+        }
+
+        // Supprimer l'objet en main
+        if (isLeftHand)
+        {
+            Destroy(heldObjLeft);
+            heldObjLeft = null;
+        }
+        else
+        {
+            Destroy(heldObjRight);
+            heldObjRight = null;
+        }
+    }
+
+
+    public void OnClickInventorySlot(GameObject inventorySlotButton)
+    {
+        Debug.Log("InventorySlot Clicked");        // Détermine si c'est un clic gauche (true) ou droit (false) via un test clavier
+        bool isLeftClick = Input.GetMouseButton(0); // Clic gauche (mouse 0)
+
+        string elementName = inventorySlotButton.name;
+
+        Transform holdPos = isLeftClick ? holdPosLeft : holdPosRight;
+        Animator animator = isLeftClick ? animatorLeftHand : animatorRightHand;
+        GameObject handElements = isLeftClick ? leftHandElements : rightHandElements;
+
+        GameObject objPrefab = Resources.Load<GameObject>(elementName);
+        if (objPrefab != null)
+        {
+            GameObject newObj = Instantiate(objPrefab, holdPos.position, Quaternion.identity);
+            newObj.transform.SetParent(holdPos);
+            UpdateUI(handElements, elementName);
+
+            if (isLeftClick)
+            {
+                heldObjLeft = newObj;
+                heldObjRbLeft = newObj.GetComponent<Rigidbody>();
+                if (heldObjRbLeft) heldObjRbLeft.isKinematic = true;
+            }
+            else
+            {
+                heldObjRight = newObj;
+                heldObjRbRight = newObj.GetComponent<Rigidbody>();
+                if (heldObjRbRight) heldObjRbRight.isKinematic = true;
+            }
+
+            inventorySlotButton.transform.Find(elementName)?.gameObject.SetActive(false);
+        }
+    }
+
+
+    GameObject FindEmptyInventorySlot()
+    {
+        foreach (Transform slot in inventoryCanvas.transform)
+        {
+            bool hasActiveChild = false;
+            foreach (Transform child in slot)
+            {
+                if (child.gameObject.activeSelf)
+                {
+                    hasActiveChild = true;
+                    break;
+                }
+            }
+
+            if (!hasActiveChild) // Si aucun enfant actif
+                return slot.gameObject;
+        }
+
+        return null;
+    }
+
 
     private string CleanName(string name)
     {
         if (name.EndsWith(" (Clone)"))
         {
-            return name.Substring(0, name.Length - 7); // Supprime " (Clone)"
+            return name.Substring(0, name.Length - 7);
         }
-        return name; // Retourne le nom d'origine
+        return name;
     }
 
+    void SetPlayerControls(bool isEnabled)
+    {
+        // Désactiver les clics et mouvements
+        FirstPersonController controller = player.GetComponent<FirstPersonController>();
+        if (controller != null)
+        {
+            controller.cameraCanMove = isEnabled; // Contrôle de la caméra
+            controller.playerCanMove = isEnabled; // Mouvements du joueur
+        }
 
-
+        // Désactiver les actions de PickUp
+        if (!isEnabled)
+        {
+            canDropLeft = false;
+            canDropRight = false;
+        }
+        else
+        {
+            canDropLeft = true;
+            canDropRight = true;
+        }
+    }
 }

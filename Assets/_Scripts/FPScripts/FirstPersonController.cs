@@ -159,13 +159,11 @@ public class FirstPersonController : MonoBehaviour
         #region Camera
 
         // Control camera movement
-        if(cameraCanMove)
+        if (cameraCanMove)
         {
             yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
             pitch -= mouseSensitivity * Input.GetAxis("Mouse Y");
 
-
-            // Clamp pitch between lookAngle
             pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
 
             transform.localEulerAngles = new Vector3(0, yaw, 0);
@@ -176,7 +174,7 @@ public class FirstPersonController : MonoBehaviour
 
         #region Sprint
 
-        if(enableSprint)
+        if (enableSprint)
         {
             if(isSprinting)
             {
