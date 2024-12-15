@@ -1,52 +1,45 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    public GameObject inventoryUI; // Canvas contenant l'inventaire
-    public List<InventorySlot> inventorySlots; // Les 3 slots centraux
-    public InventorySlot leftHandSlot; // Slot de la main gauche
-    public InventorySlot rightHandSlot; // Slot de la main droite
-    public PickUpScript pickUpScript; // Référence au script pour les mains
+    public GameObject inventoryCanvas;
+    public Button[] inventorySlots;
+    public HandManager handManager;
 
-    private bool isInventoryOpen = false;
+    private bool inventoryOpen = false;
 
     void Update()
     {
-        // Ouvrir/fermer l'inventaire avec Tab
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            ToggleInventory();
+            inventoryOpen = !inventoryOpen;
+            inventoryCanvas.SetActive(inventoryOpen);
+            Cursor.lockState = inventoryOpen ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = inventoryOpen;
         }
     }
 
-    public void ToggleInventory()
+    public void OnSlotClick(int slotIndex, bool isLeftHand)
     {
-        isInventoryOpen = !isInventoryOpen;
+        GameObject heldItem = handManager.GetHeldItem(isLeftHand);
+        GameObject slotItem = inventorySlots[slotIndex].GetComponentInChildren<Image>().gameObject;
 
-        // Activer ou désactiver l'inventaire
-        inventoryUI.SetActive(isInventoryOpen);
-
-        // Bloquer ou débloquer la souris
-        Cursor.lockState = isInventoryOpen ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = isInventoryOpen;
-
-        // Désactiver les interactions normales si l'inventaire est ouvert
-        pickUpScript.enabled = !isInventoryOpen;
+        if (heldItem != null)
+        {
+            handManager.SwapWithInventory(slotItem, isLeftHand);
+            UpdateSlot(slotIndex, heldItem);
+        }
+        else
+        {
+            handManager.PickUp(slotItem, isLeftHand);
+            UpdateSlot(slotIndex, null);
+        }
     }
 
-    public void SwapWithSlot(InventorySlot clickedSlot, int handIndex)
+    void UpdateSlot(int slotIndex, GameObject newItem)
     {
-        // Main gauche (0) ou main droite (1)
-        InventorySlot handSlot = (handIndex == 0) ? leftHandSlot : rightHandSlot;
-
-        // Échanger les objets
-        GameObject temp = handSlot.storedObject;
-        handSlot.storedObject = clickedSlot.storedObject;
-        clickedSlot.storedObject = temp;
-
-        // Mettre à jour les UI des slots
-        handSlot.UpdateUI();
-        clickedSlot.UpdateUI();
+        inventorySlots[slotIndex].GetComponentInChildren<Image>().sprite = newItem?.GetComponent<Image>().sprite;
+        inventorySlots[slotIndex].GetComponentInChildren<Image>().enabled = newItem != null;
     }
 }

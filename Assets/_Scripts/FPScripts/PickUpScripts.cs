@@ -88,12 +88,6 @@ public class PickUpScript : MonoBehaviour
         {
             outline.enabled = true;
         }
-
-        HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
-        if (hoverCanvas != null)
-        {
-            hoverCanvas.OnHoverEnter();
-        }
     }
 
     void DisableOutline(GameObject obj)
@@ -102,12 +96,6 @@ public class PickUpScript : MonoBehaviour
         if (outline != null)
         {
             outline.enabled = false;
-        }
-
-        HoverCanvas hoverCanvas = obj.GetComponent<HoverCanvas>();
-        if (hoverCanvas != null)
-        {
-            hoverCanvas.OnHoverExit();
         }
     }
 
@@ -245,46 +233,6 @@ public class PickUpScript : MonoBehaviour
             {
                 uiElement.gameObject.SetActive(true);
             }
-        }
-    }
-
-    public GameObject GetHeldObjLeft()
-    {
-        return heldObjLeft;
-    }
-
-    public void SetHeldObjLeft(GameObject obj)
-    {
-        if (heldObjLeft != null)
-        {
-            DropObject(ref heldObjLeft, ref heldObjRbLeft, animatorLeftHand);
-        }
-        heldObjLeft = obj;
-        if (obj != null)
-        {
-            obj.transform.SetParent(holdPosLeft);
-            obj.transform.localPosition = Vector3.zero;
-            obj.GetComponent<Rigidbody>().isKinematic = true;
-        }
-    }
-
-    public GameObject GetHeldObjRight()
-    {
-        return heldObjRight;
-    }
-
-    public void SetHeldObjRight(GameObject obj)
-    {
-        if (heldObjRight != null)
-        {
-            DropObject(ref heldObjRight, ref heldObjRbRight, animatorRightHand);
-        }
-        heldObjRight = obj;
-        if (obj != null)
-        {
-            obj.transform.SetParent(holdPosRight);
-            obj.transform.localPosition = Vector3.zero;
-            obj.GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 }
