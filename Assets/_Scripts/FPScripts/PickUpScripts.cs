@@ -311,36 +311,47 @@ public class PickUpScript : MonoBehaviour
 
     public void OnClickInventorySlot(GameObject inventorySlotButton)
     {
-        Debug.Log("InventorySlot Clicked");        // Détermine si c'est un clic gauche (true) ou droit (false) via un test clavier
-        bool isLeftClick = Input.GetMouseButton(0); // Clic gauche (mouse 0)
+        Debug.Log("Slot clicked: " + inventorySlotButton.name);
 
         string elementName = inventorySlotButton.name;
-
-        Transform holdPos = isLeftClick ? holdPosLeft : holdPosRight;
-        Animator animator = isLeftClick ? animatorLeftHand : animatorRightHand;
-        GameObject handElements = isLeftClick ? leftHandElements : rightHandElements;
-
         GameObject objPrefab = Resources.Load<GameObject>(elementName);
-        if (objPrefab != null)
+
+        if (objPrefab == null)
         {
-            GameObject newObj = Instantiate(objPrefab, holdPos.position, Quaternion.identity);
-            newObj.transform.SetParent(holdPos);
-            UpdateUI(handElements, elementName);
+            Debug.LogWarning($"Prefab {elementName} not found in Resources.");
+            return;
+        }
 
-            if (isLeftClick)
-            {
-                heldObjLeft = newObj;
-                heldObjRbLeft = newObj.GetComponent<Rigidbody>();
-                if (heldObjRbLeft) heldObjRbLeft.isKinematic = true;
-            }
-            else
-            {
-                heldObjRight = newObj;
-                heldObjRbRight = newObj.GetComponent<Rigidbody>();
-                if (heldObjRbRight) heldObjRbRight.isKinematic = true;
-            }
+        // Vérifie si la main gauche est disponible
+        if (heldObjLeft == null)
+        {
+            InstantiateToHand(objPrefab, ref heldObjLeft, holdPosLeft, leftHandElements, elementName, inventorySlotButton);
+        }
+        // Sinon utilise la main droite
+        else if (heldObjRight == null)
+        {
+            InstantiateToHand(objPrefab, ref heldObjRight, holdPosRight, rightHandElements, elementName, inventorySlotButton);
+        }
+        else
+        {
+            Debug.LogWarning("Both hands are occupied. Cannot pick up a new item.");
+        }
+    }
 
-            inventorySlotButton.transform.Find(elementName)?.gameObject.SetActive(false);
+    private void InstantiateToHand(GameObject prefab, ref GameObject heldObj, Transform holdPos, GameObject handElements, string elementName, GameObject inventorySlotButton)
+    {
+        // Instancie l'objet dans la main
+        heldObj = Instantiate(prefab, holdPos.position, Quaternion.identity);
+        heldObj.transform.SetParent(holdPos);
+
+        // Met à jour l'UI
+        UpdateUI(handElements, elementName);
+
+        // Désactive l'objet dans l'inventaire
+        Transform slotElement = inventorySlotButton.transform.Find(elementName);
+        if (slotElement != null)
+        {
+            slotElement.gameObject.SetActive(false);
         }
     }
 
