@@ -124,17 +124,16 @@ public class PickUpScript : MonoBehaviour
                 {
                     GameObject target = hit.transform.gameObject;
 
-                    // Gestion des PrimaryElements
                     if (target.CompareTag("PrimaryElement"))
                     {
-                        if (target.transform.parent == null) // L'objet est déjà dans la scène, on le récupère tel quel
+                        if (target.transform.parent == null) // L'objet est déjà dans la scène
                         {
                             PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
                         }
-                        else // L'objet doit être dupliqué (cas normal)
+                        else // L'objet doit être instancié
                         {
                             heldObj = Instantiate(target, holdPos.position, Quaternion.identity);
-
+                            heldObj.name = CleanName(target.name); // Renomme pour éviter "(Clone)"
                             heldObj.transform.localScale = target.transform.lossyScale;
                             heldObj.transform.SetParent(holdPos, true);
 
@@ -146,9 +145,10 @@ public class PickUpScript : MonoBehaviour
 
                             heldObj.layer = LayerNumber;
                             animator.SetBool("isHolding", true);
-                            UpdateUI(handElements, target.name);
+                            UpdateUI(holdPos == holdPosLeft ? leftHandElements : rightHandElements, heldObj.name);
                         }
                     }
+
                     // Gestion des HoldableObjects (objets normaux)
                     else if (target.CompareTag("HoldableObject"))
                     {
@@ -187,15 +187,22 @@ public class PickUpScript : MonoBehaviour
         if (pickUpObj.GetComponent<Rigidbody>())
         {
             heldObj = pickUpObj;
+            heldObj.name = CleanName(pickUpObj.name); // Renomme immédiatement pour éviter "(Clone)"
             heldObjRb = pickUpObj.GetComponent<Rigidbody>();
             heldObjRb.isKinematic = true;
-            heldObjRb.transform.parent = holdPos.transform;
+            heldObjRb.transform.parent = holdPos; // Positionner dans la main
             heldObj.layer = LayerNumber;
             Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), true);
 
-            animator.SetBool("isHolding", true); // Active l'animation de prise en main
+            animator.SetBool("isHolding", true); // Active l'animation
+            UpdateUI(holdPos == holdPosLeft ? leftHandElements : rightHandElements, heldObj.name);
         }
     }
+
+
+
+
+
 
     void DropObject(ref GameObject heldObj, ref Rigidbody heldObjRb, Animator animator)
     {
@@ -233,11 +240,13 @@ public class PickUpScript : MonoBehaviour
 
     void UpdateUI(GameObject handElements, string elementName)
     {
+        // Désactive tous les enfants
         foreach (Transform child in handElements.transform)
         {
             child.gameObject.SetActive(false);
         }
 
+        // Active l'élément correspondant, s'il existe
         if (!string.IsNullOrEmpty(elementName))
         {
             Transform uiElement = handElements.transform.Find(elementName);
@@ -245,6 +254,23 @@ public class PickUpScript : MonoBehaviour
             {
                 uiElement.gameObject.SetActive(true);
             }
+            else
+            {
+                Debug.LogWarning($"UI Element '{elementName}' not found in {handElements.name}");
+            }
         }
     }
+
+
+    private string CleanName(string name)
+    {
+        if (name.EndsWith(" (Clone)"))
+        {
+            return name.Substring(0, name.Length - 7); // Supprime " (Clone)"
+        }
+        return name; // Retourne le nom d'origine
+    }
+
+
+
 }
