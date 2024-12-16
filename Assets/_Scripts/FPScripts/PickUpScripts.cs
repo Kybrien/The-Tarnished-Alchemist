@@ -311,8 +311,6 @@ public class PickUpScript : MonoBehaviour
 
     public void OnClickInventorySlot(GameObject inventorySlotButton)
     {
-        Debug.Log("Slot clicked: " + inventorySlotButton.name);
-
         string elementName = inventorySlotButton.name;
         GameObject objPrefab = Resources.Load<GameObject>(elementName);
 
@@ -325,12 +323,12 @@ public class PickUpScript : MonoBehaviour
         // Vérifie si la main gauche est disponible
         if (heldObjLeft == null)
         {
-            InstantiateToHand(objPrefab, ref heldObjLeft, holdPosLeft, leftHandElements, elementName, inventorySlotButton);
+            InstantiateToHand(objPrefab, ref heldObjLeft, ref heldObjRbLeft, holdPosLeft, leftHandElements, animatorLeftHand, inventorySlotButton);
         }
         // Sinon utilise la main droite
         else if (heldObjRight == null)
         {
-            InstantiateToHand(objPrefab, ref heldObjRight, holdPosRight, rightHandElements, elementName, inventorySlotButton);
+            InstantiateToHand(objPrefab, ref heldObjRight, ref heldObjRbRight, holdPosRight, rightHandElements, animatorRightHand, inventorySlotButton);
         }
         else
         {
@@ -338,18 +336,29 @@ public class PickUpScript : MonoBehaviour
         }
     }
 
-    private void InstantiateToHand(GameObject prefab, ref GameObject heldObj, Transform holdPos, GameObject handElements, string elementName, GameObject inventorySlotButton)
+
+    private void InstantiateToHand(GameObject prefab, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, GameObject handElements, Animator animator, GameObject inventorySlotButton)
     {
-        // Instancie l'objet dans la main
+        // Instancie l'objet avec les paramètres fournis
         heldObj = Instantiate(prefab, holdPos.position, Quaternion.identity);
-        heldObj.name = CleanName(prefab.name); // Nettoie le nom pour enlever "(Clone)"
-        heldObj.transform.SetParent(holdPos);
+        heldObj.name = CleanName(prefab.name);
+        heldObj.transform.localScale = prefab.transform.lossyScale; // Préserve l'échelle d'origine
+        heldObj.transform.SetParent(holdPos, true);
 
-        // Met à jour l'UI
-        UpdateUI(handElements, elementName);
+        // Configure le Rigidbody
+        heldObjRb = heldObj.GetComponent<Rigidbody>();
+        if (heldObjRb != null) heldObjRb.isKinematic = true;
 
-        // Désactive l'objet dans l'inventaire
-        Transform slotElement = inventorySlotButton.transform.Find(elementName);
+        // Configure le Layer
+        heldObj.layer = LayerNumber;
+
+        // Active l'animation de prise en main
+        animator.SetBool("isHolding", true);
+
+        // Met à jour l'UI pour afficher l'objet dans la main
+        UpdateUI(handElements, heldObj.name);
+
+        // Désactive complètement le slot sélectionné
         inventorySlotButton.SetActive(false);
     }
 
