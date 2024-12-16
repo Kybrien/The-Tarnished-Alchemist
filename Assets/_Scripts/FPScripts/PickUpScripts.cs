@@ -350,10 +350,7 @@ public class PickUpScript : MonoBehaviour
 
         // Désactive l'objet dans l'inventaire
         Transform slotElement = inventorySlotButton.transform.Find(elementName);
-        if (slotElement != null)
-        {
-            slotElement.gameObject.SetActive(false);
-        }
+        inventorySlotButton.SetActive(false);
     }
 
 
