@@ -342,6 +342,7 @@ public class PickUpScript : MonoBehaviour
     {
         // Instancie l'objet dans la main
         heldObj = Instantiate(prefab, holdPos.position, Quaternion.identity);
+        heldObj.name = CleanName(prefab.name); // Nettoie le nom pour enlever "(Clone)"
         heldObj.transform.SetParent(holdPos);
 
         // Met à jour l'UI
