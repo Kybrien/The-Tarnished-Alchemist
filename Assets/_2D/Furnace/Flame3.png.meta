@@ -1,0 +1,642 @@
+fileFormatVersion: 2
+guid: 0577a01acfe568c4b8fe43bc60b5fe3b
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 141
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49e280768908b6f4eb986cb4418f995d
+      internalID: 1128330430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 141
+        width: 30
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c2450808b3264245ac92ab96a61df2a
+      internalID: 1973187548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 141
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ba3b2fea1d52a54195fd8a7c60ac2a3
+      internalID: 1034949578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 140
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 201c6ab323b6ea841bf7fcde40f2bece
+      internalID: 870963169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 81
+        width: 748
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66b2e8870d6e6774bb4cd98a63d638c7
+      internalID: 1658040591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 143
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0ac5581e8ac5234388941e877d51e0c
+      internalID: 714791586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 932
+        y: 139
+        width: 20
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fba12d4c160c4c24fb7287b0b5288876
+      internalID: -1184151734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 144
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae5608c9509b175408feea43a631c05e
+      internalID: 429500309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 145
+        width: 20
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a723b0a64c9c4e45ad01c18061b4cea
+      internalID: -1202157588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1251
+        y: 147
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6749d902f674ad747a555c9b00722741
+      internalID: 1930337842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 1338
+        y: 144
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81e638039364b7343b47c1c8698e8def
+      internalID: 1675452080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 1397
+        y: 143
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82f1b30562e6f9d4598ca0372e037206
+      internalID: -1026914171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 1521
+        y: 79
+        width: 751
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7db53f9faf0cab14d82cafbffe148573
+      internalID: 557712383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 1554
+        y: 144
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e047bb680846ccb46b3e117a30565a59
+      internalID: 374704747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 1681
+        y: 142
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19f62421104bbb04a9c510b8aeb3ad34
+      internalID: -996975148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 2026
+        y: 144
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 720a297d30e25dd438da5e1decb7d970
+      internalID: -803668335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 2107
+        y: 143
+        width: 18
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 059ff7d58cc65d642b2b979437721c0c
+      internalID: -1501719375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 2169
+        y: 144
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 479ab747edc18f54ba92bf4af865e96f
+      internalID: -897025910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 82
+        width: 743
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e1d15803a672d0498f4f082e700b5ce
+      internalID: -710769399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 78
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef5d6cf17b5ed44e8b69bdcf5c696e8
+      internalID: 5076028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 81
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9ab30a425625e843a068b8cb7f3beb3
+      internalID: 437090535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 80
+        width: 13
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4b01e3ea5baed04aba468d905409e16
+      internalID: -580183478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 529
+        y: 80
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46bc5ab957dad004c80e486e48915499
+      internalID: -987340695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FlameSlider3-Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 80
+        width: 17
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dc82ab078948e64bb0a903f8ef8d346
+      internalID: -892705219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 34e069d0837c2c04ab398f4f2bb740d5
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      FlameSlider3-Sheet_0: 1128330430
+      FlameSlider3-Sheet_1: 1973187548
+      FlameSlider3-Sheet_10: 1675452080
+      FlameSlider3-Sheet_11: -1026914171
+      FlameSlider3-Sheet_12: 557712383
+      FlameSlider3-Sheet_13: 374704747
+      FlameSlider3-Sheet_14: -996975148
+      FlameSlider3-Sheet_15: -803668335
+      FlameSlider3-Sheet_16: -1501719375
+      FlameSlider3-Sheet_17: -897025910
+      FlameSlider3-Sheet_18: -710769399
+      FlameSlider3-Sheet_19: 5076028
+      FlameSlider3-Sheet_2: 1034949578
+      FlameSlider3-Sheet_20: 437090535
+      FlameSlider3-Sheet_21: -580183478
+      FlameSlider3-Sheet_22: -987340695
+      FlameSlider3-Sheet_23: -892705219
+      FlameSlider3-Sheet_3: 870963169
+      FlameSlider3-Sheet_4: 1658040591
+      FlameSlider3-Sheet_5: 714791586
+      FlameSlider3-Sheet_6: -1184151734
+      FlameSlider3-Sheet_7: 429500309
+      FlameSlider3-Sheet_8: -1202157588
+      FlameSlider3-Sheet_9: 1930337842
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
