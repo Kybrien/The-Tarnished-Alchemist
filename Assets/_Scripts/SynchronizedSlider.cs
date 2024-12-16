@@ -8,6 +8,10 @@ public class SynchronizedSlider : MonoBehaviour
     public Image flamePink;        // Barre rose (0.33 - 0.66)
     public Image flameBlue;        // Barre bleue (0.66 - 1)
 
+    public GameObject fireRed;
+    public GameObject firePink;
+    public GameObject fireBlue;
+
     private float segment1End = 0.33f; // Fin du segment rouge
     private float segment2End = 0.66f; // Fin du segment rose
 
