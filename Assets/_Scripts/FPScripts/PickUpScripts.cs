@@ -258,55 +258,44 @@ public class PickUpScript : MonoBehaviour
     public void OnClickHandSlot(GameObject handSlotButton)
     {
         string elementName = handSlotButton.name;
-        Debug.Log($"HandSlot clicked: {elementName}");
 
         bool isLeftHand = handSlotButton.transform.IsChildOf(leftHandElements.transform);
-        Debug.Log($"Is Left Hand: {isLeftHand}");
 
+        // Trouve un slot vide dans l'inventaire
         GameObject targetSlot = FindEmptyInventorySlot();
-        if (targetSlot == null)
+        if (targetSlot != null)
         {
-            Debug.LogWarning("No empty inventory slot found.");
-            return;
-        }
+            // Active l'objet dans le slot
+            Transform slotElement = targetSlot.transform.Find(elementName);
+            if (slotElement != null)
+            {
+                slotElement.gameObject.SetActive(true);
+            }
 
-        // Activer l'élément dans l'inventaire
-        GameObject elementInInventory = targetSlot.transform.Find(elementName)?.gameObject;
-        if (elementInInventory != null)
-        {
-            elementInInventory.SetActive(true);
-            Debug.Log($"Activated {elementName} in inventory slot.");
-        }
-        else
-        {
-            Debug.LogWarning($"Element {elementName} not found in inventory slot.");
-        }
+            // Désactive l'objet dans la main
+            GameObject handElements = isLeftHand ? leftHandElements : rightHandElements;
+            Transform handElement = handElements.transform.Find(elementName);
+            if (handElement != null)
+            {
+                handElement.gameObject.SetActive(false);
+            }
 
-        // Désactiver l'élément dans la main
-        GameObject handElements = isLeftHand ? leftHandElements : rightHandElements;
-        GameObject elementInHand = handElements.transform.Find(elementName)?.gameObject;
-        if (elementInHand != null)
-        {
-            elementInHand.SetActive(false);
-            Debug.Log($"Deactivated {elementName} in hand.");
-        }
-        else
-        {
-            Debug.LogWarning($"Element {elementName} not found in hand.");
-        }
-
-        // Supprimer l'objet en main
-        if (isLeftHand)
-        {
-            Destroy(heldObjLeft);
-            heldObjLeft = null;
-        }
-        else
-        {
-            Destroy(heldObjRight);
-            heldObjRight = null;
+            // Détruit l'objet tenu et réinitialise l'Animator
+            if (isLeftHand)
+            {
+                Destroy(heldObjLeft);
+                heldObjLeft = null;
+                animatorLeftHand.SetBool("isHolding", false);
+            }
+            else
+            {
+                Destroy(heldObjRight);
+                heldObjRight = null;
+                animatorRightHand.SetBool("isHolding", false);
+            }
         }
     }
+
 
 
     public void OnClickInventorySlot(GameObject inventorySlotButton)
@@ -339,10 +328,10 @@ public class PickUpScript : MonoBehaviour
 
     private void InstantiateToHand(GameObject prefab, ref GameObject heldObj, ref Rigidbody heldObjRb, Transform holdPos, GameObject handElements, Animator animator, GameObject inventorySlotButton)
     {
-        // Instancie l'objet avec les paramètres fournis
+        // Instancie l'objet
         heldObj = Instantiate(prefab, holdPos.position, Quaternion.identity);
         heldObj.name = CleanName(prefab.name);
-        heldObj.transform.localScale = prefab.transform.lossyScale; // Préserve l'échelle d'origine
+        heldObj.transform.localScale = prefab.transform.lossyScale; // Préserve l'échelle
         heldObj.transform.SetParent(holdPos, true);
 
         // Configure le Rigidbody
@@ -352,15 +341,14 @@ public class PickUpScript : MonoBehaviour
         // Configure le Layer
         heldObj.layer = LayerNumber;
 
-        // Active l'animation de prise en main
+        // Met à jour l'UI et l'animation
         animator.SetBool("isHolding", true);
-
-        // Met à jour l'UI pour afficher l'objet dans la main
         UpdateUI(handElements, heldObj.name);
 
-        // Désactive complètement le slot sélectionné
+        // Désactive le slot dans l'inventaire
         inventorySlotButton.SetActive(false);
     }
+
 
 
     GameObject FindEmptyInventorySlot()
