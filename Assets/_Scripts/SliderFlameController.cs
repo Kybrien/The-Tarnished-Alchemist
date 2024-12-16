@@ -1,59 +1,53 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SliderFlameController : MonoBehaviour
+public class SliderBarSwitcher : MonoBehaviour
 {
-    public Slider slider; // Le slider principal
-    public Image flame1;  // Image de Flame1
-    public Image flame2;  // Image de Flame2
-    public Image flame3;  // Image de Flame3
+    public Slider slider;          // Le slider principal
+    public Image flameRed;         // Barre rouge (0 - 0.33)
+    public Image flamePink;        // Barre rose (0.33 - 0.66)
+    public Image flameBlue;        // Barre bleue (0.66 - 1)
 
     void Start()
     {
-        UpdateFlame(); // Met à jour la flamme initiale
+        UpdateBar(); // Mise à jour initiale
     }
 
     public void OnSliderValueChanged()
     {
-        UpdateFlame();
+        UpdateBar();
     }
 
-    void UpdateFlame()
+    void UpdateBar()
     {
-        // Récupère la valeur du slider
         float sliderValue = slider.value;
 
-        // Assure que le slider a bien une Image de FillRect
-        Image fillImage = slider.fillRect.GetComponent<Image>();
-        if (fillImage == null)
-        {
-            Debug.LogError("FillRect does not have an Image component!");
-            return;
-        }
+        // Réinitialisation des barres
+        flameRed.fillAmount = 0;
+        flamePink.fillAmount = 0;
+        flameBlue.fillAmount = 0;
 
-        // Désactive toutes les flammes
-        flame1.enabled = false;
-        flame2.enabled = false;
-        flame3.enabled = false;
+        flameRed.gameObject.SetActive(false);
+        flamePink.gameObject.SetActive(false);
+        flameBlue.gameObject.SetActive(false);
 
-        // Active la flamme et configure le FillRect en fonction de la valeur du slider
+        // Gestion de la barre rouge (0 à 0.33)
         if (sliderValue <= 0.33f)
         {
-            flame1.enabled = true;
-            fillImage.sprite = flame1.sprite; // Assignation du sprite de Flame1
+            flameRed.gameObject.SetActive(true);
+            flameRed.fillAmount = sliderValue / 0.33f; // Proportionnel à sa plage
         }
+        // Gestion de la barre rose (0.33 à 0.66)
         else if (sliderValue > 0.33f && sliderValue <= 0.66f)
         {
-            flame2.enabled = true;
-            fillImage.sprite = flame2.sprite; // Assignation du sprite de Flame2
+            flamePink.gameObject.SetActive(true);
+            flamePink.fillAmount = (sliderValue - 0.33f) / 0.33f; // Proportionnel à sa plage
         }
+        // Gestion de la barre bleue (0.66 à 1)
         else if (sliderValue > 0.66f)
         {
-            flame3.enabled = true;
-            fillImage.sprite = flame3.sprite; // Assignation du sprite de Flame3
+            flameBlue.gameObject.SetActive(true);
+            flameBlue.fillAmount = (sliderValue - 0.66f) / 0.34f; // Proportionnel à sa plage
         }
-
-        // Assure que l'image du FillRect est affichée correctement
-        fillImage.enabled = true;
     }
 }
