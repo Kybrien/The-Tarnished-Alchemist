@@ -11,9 +11,17 @@ public class SynchronizedSlider : MonoBehaviour
     private float segment1End = 0.33f; // Fin du segment rouge
     private float segment2End = 0.66f; // Fin du segment rose
 
+    public Transform sliderHandle;     // Transform du Handle pour détection
+    public float rotationSensitivity = 0.1f; // Sensibilité pour ajuster le slider
+
+    private bool isInteracting = false; // Indique si le joueur manipule le slider
+    private Transform playerCamera;     // La caméra du joueur pour capter les mouvements
+    private float initialYaw;           // Rotation initiale de la caméra (Yaw)
+
     void Start()
     {
         UpdateBar(); // Mise à jour initiale
+        playerCamera = Camera.main.transform; // Récupère la caméra principale
     }
 
     public void OnSliderValueChanged()
@@ -50,6 +58,11 @@ public class SynchronizedSlider : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        HandleSliderInteraction(); // Ajout pour gérer l'interaction
+    }
+
     void ResetBars()
     {
         // Remet les barres à 0 mais garde leur synchronisation
@@ -60,5 +73,38 @@ public class SynchronizedSlider : MonoBehaviour
         flameRed.gameObject.SetActive(false);
         flamePink.gameObject.SetActive(false);
         flameBlue.gameObject.SetActive(false);
+    }
+
+    void HandleSliderInteraction()
+    {
+        // Détection du clic gauche sur le Handle pour commencer l'interaction
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.collider != null && hit.collider.transform == sliderHandle)
+                {
+                    isInteracting = true;               // Active l'interaction
+                    initialYaw = playerCamera.eulerAngles.y; // Sauvegarde l'angle initial
+                }
+            }
+        }
+
+        // Si le joueur interagit avec le slider
+        if (isInteracting)
+        {
+            float currentYaw = playerCamera.eulerAngles.y;       // Récupère la rotation actuelle
+            float deltaYaw = Mathf.DeltaAngle(initialYaw, currentYaw); // Différence d'angle
+            slider.value += deltaYaw * rotationSensitivity * Time.deltaTime; // Ajuste la valeur du slider
+            slider.value = Mathf.Clamp(slider.value, slider.minValue, slider.maxValue); // Limite la valeur
+            initialYaw = currentYaw; // Met à jour la position de référence
+        }
+
+        // Arrête l'interaction lorsque le clic gauche est relâché
+        if (Input.GetMouseButtonUp(0))
+        {
+            isInteracting = false;
+        }
     }
 }
