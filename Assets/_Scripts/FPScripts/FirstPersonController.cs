@@ -8,6 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 #if UNITY_EDITOR
     using UnityEditor;
@@ -157,6 +159,12 @@ public class FirstPersonController : MonoBehaviour
     private void Update()
     {
         #region Camera
+
+        if (IsPointerOverWorldUI())
+        {
+            Debug.Log("On UI");
+            return; // Ignore les contrôles si on interagit avec l'UI ou un slider
+        }
 
         // Control camera movement
         if (cameraCanMove)
@@ -351,5 +359,25 @@ public class FirstPersonController : MonoBehaviour
             timer = 0;
             joint.localPosition = new Vector3(Mathf.Lerp(joint.localPosition.x, jointOriginalPos.x, Time.deltaTime * bobSpeed), Mathf.Lerp(joint.localPosition.y, jointOriginalPos.y, Time.deltaTime * bobSpeed), Mathf.Lerp(joint.localPosition.z, jointOriginalPos.z, Time.deltaTime * bobSpeed));
         }
+    }
+
+    private bool IsPointerOverUIElement()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
+    private bool IsPointerOverWorldUI()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            // Vérifie si l'objet touché est sur un Layer interactif ou contient un Slider
+            if (hit.collider.GetComponent<Slider>())
+            {
+                Debug.Log("Slider détecté !");
+                return true;
+            }
+        }
+        return false;
     }
 }
