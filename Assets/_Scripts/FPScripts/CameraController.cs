@@ -135,7 +135,7 @@ public class CameraController: MonoBehaviour
 
                     if (target.CompareTag("PrimaryElement"))
                     {
-                        if (target.transform.parent == null)
+                        if (target.transform.parent == null || target.transform.parent.name == "ObjectPos" )
                         {
                             PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
                         }
@@ -167,7 +167,7 @@ public class CameraController: MonoBehaviour
             else
             {
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpRange))
+                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickUpRange))
                 {
                     if (hit.collider.CompareTag("Mixer")) // Vérifie si on regarde un Mixer
                     {
@@ -176,8 +176,14 @@ public class CameraController: MonoBehaviour
 
                         if (mixer != null)
                         {
-                            mixer.PlaceObject(heldObj);
-                            heldObj = null;       // Libère la main
+                            if (mixer.IsFull()) // Vérifie si le conteneur est plein
+                            {
+                                Debug.LogWarning("Le Mixer est plein. Impossible de placer un objet.");
+                                return; // On retourne directement sans rien faire
+                            }
+
+                            mixer.PlaceObject(heldObj); // Place l'objet si le Mixer n'est pas plein
+                            heldObj = null;             // Libère la main
                             heldObjRb = null;
                             animator.SetBool("isHolding", false);
                             UpdateUI(handElements, "");

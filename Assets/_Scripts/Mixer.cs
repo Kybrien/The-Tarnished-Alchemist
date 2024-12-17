@@ -31,6 +31,13 @@ public class Mixer : MonoBehaviour
     // Place un objet sur une position donnée
     public void PlaceObject(GameObject obj)
     {
+
+        if (IsFull()) // Vérifie si le conteneur est plein
+        {
+            Debug.LogWarning("Le conteneur est déjà plein. Placement annulé.");
+            return; // Sort de la fonction sans rien faire
+        }
+
         Transform targetPos = GetAvailablePosition();
 
         if (targetPos != null)
@@ -49,5 +56,15 @@ public class Mixer : MonoBehaviour
         {
             Debug.LogWarning("Échec du placement : aucune position disponible.");
         }
+    }
+
+    public bool IsFull()
+    {
+        foreach (Transform pos in availablePositions)
+        {
+            if (pos.childCount == 0) // Si une position est encore vide
+                return false;
+        }
+        return true; // Toutes les positions sont occupées
     }
 }
