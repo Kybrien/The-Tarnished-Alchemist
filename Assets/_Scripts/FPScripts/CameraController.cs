@@ -83,7 +83,7 @@ public class CameraController: MonoBehaviour
                     DisableOutline(currentHoveredObject);
                 }
 
-                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) &&
+                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) || target.CompareTag("Mixer") || target.CompareTag("Spoon") &&
                     target != heldObjLeft && target != heldObjRight)
                 {
                     EnableOutline(target);
