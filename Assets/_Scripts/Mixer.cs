@@ -2,31 +2,52 @@ using UnityEngine;
 
 public class Mixer : MonoBehaviour
 {
-    public Transform mixPoint; // Point où les objets seront positionnés pour être mélangés
-    public GameObject concoctionPrefab; // Préfab de la concoction résultante
+    public Transform Pos1, Pos2, Pos3; // Emplacements disponibles
+    private Transform[] availablePositions;
 
-    public void Mix(GameObject elementPrimary, GameObject elementSecondary, Transform handPos)
+    void Start()
     {
-        // Vérifier que les deux éléments sont valides
-        if (elementPrimary == null || elementSecondary == null)
+        // Initialise les positions
+        availablePositions = new Transform[] { Pos1, Pos2, Pos3 };
+        Debug.Log("Mixer initialized with positions: " + Pos1.name + ", " + Pos2.name + ", " + Pos3.name);
+    }
+
+    // Trouve un emplacement libre
+    public Transform GetAvailablePosition()
+    {
+        foreach (Transform pos in availablePositions)
         {
-            Debug.LogWarning("Vous devez avoir un élément primaire et un élément secondaire pour mélanger.");
-            return;
+            //Debug.Log($"Checking position {pos.name} - Child count: {pos.childCount}");
+            if (pos.childCount == 0) // Si l'emplacement est vide
+            {
+                //Debug.Log($"Position trouvée : {pos.name}");
+                return pos;
+            }
         }
+        //Debug.LogWarning("Aucune position disponible !");
+        return null;
+    }
 
-        // Supprimer les ingrédients
-        Destroy(elementPrimary);
-        Destroy(elementSecondary);
+    // Place un objet sur une position donnée
+    public void PlaceObject(GameObject obj)
+    {
+        Transform targetPos = GetAvailablePosition();
 
-        // Créer la concoction
-        GameObject concoction = Instantiate(concoctionPrefab, mixPoint.position, Quaternion.identity);
-
-        // Placer la concoction dans la main gauche
-        concoction.transform.SetParent(handPos);
-        concoction.transform.localPosition = Vector3.zero;
-        concoction.transform.localRotation = Quaternion.identity;
-
-        // Ajout de logique supplémentaire si nécessaire
-        Debug.Log("Les ingrédients ont été mélangés avec succès !");
+        if (targetPos != null)
+        {
+            //Debug.Log($"Placement de l'objet {obj.name} sur {targetPos.name}");
+            obj.transform.SetParent(targetPos);
+            obj.transform.position = targetPos.position; // Place précisément l'objet
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.isKinematic = true; // Désactive la physique
+            }
+            Debug.Log($"{obj.name} placé avec succès sur {targetPos.name}");
+        }
+        else
+        {
+            Debug.LogWarning("Échec du placement : aucune position disponible.");
+        }
     }
 }

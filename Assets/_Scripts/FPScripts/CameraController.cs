@@ -37,6 +37,8 @@ public class CameraController: MonoBehaviour
 
     private bool isInventoryOpen = false; // État d'ouverture de l'inventaire
 
+    
+
     void Start()
     {
         LayerNumber = LayerMask.NameToLayer("CanBeHold");
@@ -164,11 +166,32 @@ public class CameraController: MonoBehaviour
             }
             else
             {
-                if (canDrop)
+                RaycastHit hit;
+                if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpRange))
                 {
-                    DropObject(ref heldObj, ref heldObjRb, animator);
-                    UpdateUI(handElements, "");
+                    if (hit.collider.CompareTag("Mixer")) // Vérifie si on regarde un Mixer
+                    {
+                        Debug.Log("Mixer détecté au clic");
+                        Mixer mixer = hit.collider.GetComponent<Mixer>();
+
+                        if (mixer != null)
+                        {
+                            mixer.PlaceObject(heldObj);
+                            heldObj = null;       // Libère la main
+                            heldObjRb = null;
+                            animator.SetBool("isHolding", false);
+                            UpdateUI(handElements, "");
+                            Debug.Log("Objet placé dans le conteneur.");
+                        }
+                    }
+                    else if (canDrop)// Sinon, lâche l'objet normalement
+                    {
+                        DropObject(ref heldObj, ref heldObjRb, animator);
+                        UpdateUI(handElements, "");
+                    }
                 }
+                
+
             }
         }
 
