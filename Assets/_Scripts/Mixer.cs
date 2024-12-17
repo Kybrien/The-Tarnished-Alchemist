@@ -3,6 +3,7 @@ using UnityEngine;
 public class Mixer : MonoBehaviour
 {
     public Transform Pos1, Pos2, Pos3; // Emplacements disponibles
+    public GameObject Pos1UI, Pos2UI, Pos3UI;
     private Transform[] availablePositions;
 
     void Start()
