@@ -36,14 +36,17 @@ public class SynchronizedSlider : MonoBehaviour
     void UpdateBar()
     {
         float sliderValue = slider.value;
-
         // Réinitialisation des barres
         ResetBars();
 
         // Gestion de la barre rouge (0 à 0.33)
-        if (sliderValue <= segment1End)
+        if (sliderValue <= segment1End && sliderValue != 0)
         {
             flameRed.gameObject.SetActive(true);
+
+            fireRed.gameObject.SetActive(true);
+            fireBlue.gameObject.SetActive(false);
+            firePink.gameObject.SetActive(false);
             flameRed.fillAmount = sliderValue; // Synchrone avec la valeur globale
         }
 
@@ -51,6 +54,10 @@ public class SynchronizedSlider : MonoBehaviour
         else if (sliderValue > segment1End && sliderValue <= segment2End)
         {
             flamePink.gameObject.SetActive(true);
+
+            fireBlue.gameObject.SetActive(false);
+            fireRed.gameObject.SetActive(false);
+            firePink.gameObject.SetActive(true);
             flamePink.fillAmount = sliderValue; // Synchrone avec la valeur globale
         }
 
@@ -58,6 +65,10 @@ public class SynchronizedSlider : MonoBehaviour
         else if (sliderValue > segment2End)
         {
             flameBlue.gameObject.SetActive(true);
+
+            fireRed.gameObject.SetActive(false);
+            firePink.gameObject.SetActive(false);
+            fireBlue.gameObject.SetActive(true);
             flameBlue.fillAmount = sliderValue; // Synchrone avec la valeur globale
         }
     }
