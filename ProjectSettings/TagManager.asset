@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HoldableObject
   - PrimaryElement
+  - Mixer
   layers:
   - Default
   - TransparentFX

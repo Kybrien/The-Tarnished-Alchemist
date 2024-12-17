@@ -374,7 +374,6 @@ public class FirstPersonController : MonoBehaviour
             // Vérifie si l'objet touché est sur un Layer interactif ou contient un Slider
             if (hit.collider.GetComponent<Slider>())
             {
-                Debug.Log("Slider détecté !");
                 return true;
             }
         }
