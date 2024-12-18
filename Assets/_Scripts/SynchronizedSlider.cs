@@ -1,3 +1,4 @@
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,20 +13,22 @@ public class SynchronizedSlider : MonoBehaviour
     public GameObject firePink;
     public GameObject fireBlue;
 
+    public TextMeshProUGUI temperatureText; // Texte pour afficher la tempÃ©rature
+
     private float segment1End = 0.33f; // Fin du segment rouge
     private float segment2End = 0.66f; // Fin du segment rose
 
-    public Transform sliderHandle;     // Transform du Handle pour détection
-    public float rotationSensitivity = 0.1f; // Sensibilité pour ajuster le slider
+    public Transform sliderHandle;     // Transform du Handle pour dÃ©tection
+    public float rotationSensitivity = 0.1f; // SensibilitÃ© pour ajuster le slider
 
     private bool isInteracting = false; // Indique si le joueur manipule le slider
-    private Transform playerCamera;     // La caméra du joueur pour capter les mouvements
-    private float initialYaw;           // Rotation initiale de la caméra (Yaw)
+    private Transform playerCamera;     // La camÃ©ra du joueur pour capter les mouvements
+    private float initialYaw;           // Rotation initiale de la camÃ©ra (Yaw)
 
     void Start()
     {
-        UpdateBar(); // Mise à jour initiale
-        playerCamera = Camera.main.transform; // Récupère la caméra principale
+        UpdateBar(); // Mise Ã  jour initiale
+        playerCamera = Camera.main.transform; // RÃ©cupÃ¨re la camÃ©ra principale
     }
 
     public void OnSliderValueChanged()
@@ -36,51 +39,57 @@ public class SynchronizedSlider : MonoBehaviour
     void UpdateBar()
     {
         float sliderValue = slider.value;
-        // Réinitialisation des barres
         ResetBars();
 
-        // Gestion de la barre rouge (0 à 0.33)
+        // TempÃ©rature calculÃ©e
+        int temperature = Mathf.RoundToInt(sliderValue * 300); // Exemple : 0 â†’ 300Â°C
+        temperatureText.text = $"{temperature}Â°C";
+
+        // Gestion de la barre rouge (0 Ã  0.33)
         if (sliderValue <= segment1End && sliderValue != 0)
         {
             flameRed.gameObject.SetActive(true);
-
             fireRed.gameObject.SetActive(true);
             fireBlue.gameObject.SetActive(false);
             firePink.gameObject.SetActive(false);
             flameRed.fillAmount = sliderValue; // Synchrone avec la valeur globale
-        }
 
-        // Gestion de la barre rose (0.33 à 0.66)
+            // Couleur du texte en rouge
+            temperatureText.color = Color.red;
+        }
+        // Gestion de la barre rose (0.33 Ã  0.66)
         else if (sliderValue > segment1End && sliderValue <= segment2End)
         {
             flamePink.gameObject.SetActive(true);
-
             fireBlue.gameObject.SetActive(false);
             fireRed.gameObject.SetActive(false);
             firePink.gameObject.SetActive(true);
             flamePink.fillAmount = sliderValue; // Synchrone avec la valeur globale
-        }
 
-        // Gestion de la barre bleue (0.66 à 1)
+            // Couleur du texte en rose
+            temperatureText.color = new Color(1f, 0.41f, 0.71f); // RGB pour le rose
+        }
+        // Gestion de la barre bleue (0.66 Ã  1)
         else if (sliderValue > segment2End)
         {
             flameBlue.gameObject.SetActive(true);
-
             fireRed.gameObject.SetActive(false);
             firePink.gameObject.SetActive(false);
             fireBlue.gameObject.SetActive(true);
             flameBlue.fillAmount = sliderValue; // Synchrone avec la valeur globale
+
+            // Couleur du texte en bleu
+            temperatureText.color = new Color(0f, 0.59f, 1f);
         }
     }
 
     void Update()
     {
-        HandleSliderInteraction(); // Ajout pour gérer l'interaction
+        HandleSliderInteraction(); // Ajout pour gÃ©rer l'interaction
     }
 
     void ResetBars()
     {
-        // Remet les barres à 0 mais garde leur synchronisation
         flameRed.fillAmount = 0;
         flamePink.fillAmount = 0;
         flameBlue.fillAmount = 0;
@@ -92,7 +101,6 @@ public class SynchronizedSlider : MonoBehaviour
 
     void HandleSliderInteraction()
     {
-        // Détection du clic gauche sur le Handle pour commencer l'interaction
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -106,17 +114,15 @@ public class SynchronizedSlider : MonoBehaviour
             }
         }
 
-        // Si le joueur interagit avec le slider
         if (isInteracting)
         {
-            float currentYaw = playerCamera.eulerAngles.y;       // Récupère la rotation actuelle
-            float deltaYaw = Mathf.DeltaAngle(initialYaw, currentYaw); // Différence d'angle
+            float currentYaw = playerCamera.eulerAngles.y;       // RÃ©cupÃ¨re la rotation actuelle
+            float deltaYaw = Mathf.DeltaAngle(initialYaw, currentYaw); // DiffÃ©rence d'angle
             slider.value += deltaYaw * rotationSensitivity * Time.deltaTime; // Ajuste la valeur du slider
             slider.value = Mathf.Clamp(slider.value, slider.minValue, slider.maxValue); // Limite la valeur
-            initialYaw = currentYaw; // Met à jour la position de référence
+            initialYaw = currentYaw; // Met Ã  jour la position de rÃ©fÃ©rence
         }
 
-        // Arrête l'interaction lorsque le clic gauche est relâché
         if (Input.GetMouseButtonUp(0))
         {
             isInteracting = false;
