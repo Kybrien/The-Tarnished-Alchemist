@@ -5,6 +5,7 @@ using UnityEngine;
 public class Spoon : MonoBehaviour
 {
     public GameObject FX1; // Effet à activer
+    public GameObject FX2; // Effet à activer
     public Animator spoonAnimator; // Animator pour l'animation Cooking
     public Mixer mixer; // Référence au script Mixer
 
@@ -15,7 +16,6 @@ public class Spoon : MonoBehaviour
     {
         if (isCooking)
         {
-            Debug.Log("L'animation est déjà en cours.");
             return; // Empêche de relancer la fonction si l'animation est en cours
         }
 
@@ -24,7 +24,6 @@ public class Spoon : MonoBehaviour
             Debug.LogError("Assurez-vous d'avoir assigné l'Animator, FX1 et le Mixer dans l'inspecteur.");
             return;
         }
-
         StartCoroutine(CookingRoutine());
     }
 
@@ -36,24 +35,25 @@ public class Spoon : MonoBehaviour
         spoonAnimator.SetTrigger("Cooking");
 
         // Active l'effet
-        FX1.SetActive(true);
-
-        // Attend la fin de l'animation
-        AnimatorStateInfo animationState = spoonAnimator.GetCurrentAnimatorStateInfo(0);
-        while (animationState.IsName("Cooking") && animationState.normalizedTime < 1.0f)
+        if (FX1 != null)
         {
-            animationState = spoonAnimator.GetCurrentAnimatorStateInfo(0);
-            yield return null;
+            FX1.SetActive(false); // Désactive d'abord pour éviter tout état précédent
+            FX1.SetActive(true);  // Force l'activation
         }
 
+        yield return new WaitForSeconds(2.65f);
+
         // Désactive l'effet
-        FX1.SetActive(false);
+        FX1.gameObject.SetActive(false);
+        FX2.gameObject.SetActive(true);
 
         // Récupère les objets dans le conteneur
         List<string> elements = CheckAndClearMixer();
         Debug.Log("Éléments récupérés : " + string.Join(", ", elements));
+        yield return new WaitForSeconds(0.92f);
 
         isCooking = false;
+        FX2.gameObject.SetActive(false);
     }
 
     // Vérifie les éléments dans le Mixer et les détruit
