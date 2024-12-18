@@ -154,6 +154,18 @@ public class CameraController: MonoBehaviour
                             UpdateUI(holdPos == holdPosLeft ? leftHandElements : rightHandElements, heldObj.name);
                         }
                     }
+                    if (hit.collider.CompareTag("Spoon")) // Vérifie le tag "Spoon"
+                    {
+                        Spoon spoon = hit.collider.GetComponent<Spoon>();
+                        if (spoon != null)
+                        {
+                            spoon.UseSpoon(); // Appelle la fonction UseSpoon sur l'objet Spoon
+                        }
+                        else
+                        {
+                            Debug.LogWarning("L'objet avec le tag Spoon n'a pas de script Spoon attaché !");
+                        }
+                    }
                     else if (target.CompareTag("HoldableObject"))
                     {
                         PickUpObject(target, ref heldObj, ref heldObjRb, holdPos, animator);
