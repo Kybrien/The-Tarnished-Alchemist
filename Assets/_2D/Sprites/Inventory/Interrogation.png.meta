@@ -113,12 +113,12 @@ TextureImporter:
       name: Interrogation_0
       rect:
         serializedVersion: 2
-        x: 45
-        y: 63
-        width: 36
-        height: 42
+        x: 0
+        y: 35
+        width: 126
+        height: 91
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -134,12 +134,12 @@ TextureImporter:
       name: Interrogation_1
       rect:
         serializedVersion: 2
-        x: 170
-        y: 58
-        width: 39
-        height: 47
+        x: 126
+        y: 35
+        width: 126
+        height: 91
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: Interrogation_2
       rect:
         serializedVersion: 2
-        x: 296
-        y: 64
-        width: 38
-        height: 40
+        x: 252
+        y: 35
+        width: 126
+        height: 91
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -168,69 +168,6 @@ TextureImporter:
       bones: []
       spriteID: 97b2d1eae42abeb44abc0bc2593c8c8f
       internalID: -692695462
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Interrogation_3
-      rect:
-        serializedVersion: 2
-        x: 60
-        y: 41
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bbb56dfe1680fe84786fa58d0190d6dd
-      internalID: 434290205
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Interrogation_4
-      rect:
-        serializedVersion: 2
-        x: 186
-        y: 44
-        width: 6
-        height: 10
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3d94ebc4f6de099498216585bbd91bfd
-      internalID: 1073519878
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Interrogation_5
-      rect:
-        serializedVersion: 2
-        x: 310
-        y: 45
-        width: 7
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a50c33f3fa1aec144804651dd9885f37
-      internalID: -236084124
       vertices: []
       indices: 
       edges: []
@@ -249,9 +186,6 @@ TextureImporter:
       Interrogation_0: -1595505007
       Interrogation_1: 2012235539
       Interrogation_2: -692695462
-      Interrogation_3: 434290205
-      Interrogation_4: 1073519878
-      Interrogation_5: -236084124
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
