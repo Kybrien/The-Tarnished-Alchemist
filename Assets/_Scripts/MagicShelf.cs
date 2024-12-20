@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class BlackMarketUI : MonoBehaviour
+public class BlackHole : MonoBehaviour
 {
     [Header("UI Panels")]
     public RectTransform tabsPanel;       // Panel contenant les onglets
