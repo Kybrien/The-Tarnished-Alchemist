@@ -13,20 +13,43 @@ public class BlackHole : MonoBehaviour
     public GameObject itemPrefab;        // Prefab d'un item
 
     [Header("Configuration")]
-    public int numberOfTabs = 3;         // Nombre d'onglets
-    public int itemsPerTab = 10;         // Nombre d'items par onglet
+    public int minTabs = 1;              // Minimum d'onglets
+    public int maxTabs = 4;              // Maximum d'onglets
+    public int minItemsPerTab = 3;       // Minimum d'items par onglet
+    public int maxItemsPerTab = 12;      // Maximum d'items par onglet
 
+    private int numberOfTabs;            // Nombre d'onglets généré aléatoirement
+    private int[] itemsPerTab;           // Tableau pour stocker le nombre d'items par onglet
     private GameObject[] tabs;           // Références aux onglets
     private GameObject[][] items;        // Références aux items par onglet
 
-    private void Start()
+    private void OnEnable()
     {
+        // Appelé à chaque ouverture du Canvas
+        GenerateRandomTabsAndItems();
+    }
+
+    private void GenerateRandomTabsAndItems()
+    {
+        // Détermine aléatoirement le nombre d'onglets
+        numberOfTabs = Random.Range(minTabs, maxTabs + 1);
+        itemsPerTab = new int[numberOfTabs];
+
+        // Détermine aléatoirement le nombre d'items pour chaque onglet
+        for (int i = 0; i < numberOfTabs; i++)
+        {
+            itemsPerTab[i] = Random.Range(minItemsPerTab, maxItemsPerTab + 1);
+        }
+
+        // Regénère les onglets et les items
         GenerateTabs();
     }
 
     private void GenerateTabs()
     {
-        // Initialisation des structures
+        // Supprime les anciens onglets et items si nécessaire
+        ClearOldTabsAndItems();
+
         tabs = new GameObject[numberOfTabs];
         items = new GameObject[numberOfTabs][];
 
@@ -55,22 +78,9 @@ public class BlackHole : MonoBehaviour
             if (text != null)
             {
                 text.text = $"Tab {i + 1}";
-
-                // Désactiver l'auto-sizing pour une taille fixe
-                text.enableAutoSizing = false;
-                text.fontSize = Mathf.Min(tabHeight / 2, 24); // Ajuste la taille du texte à la hauteur du tab
-                text.alignment = TextAlignmentOptions.Center; // Centre le texte horizontalement et verticalement
-
-                // Configuration du RectTransform du texte
-                RectTransform textRect = text.GetComponent<RectTransform>();
-                textRect.anchorMin = new Vector2(0, 0);
-                textRect.anchorMax = new Vector2(1, 1);
-                textRect.pivot = new Vector2(0.5f, 0.5f); // Centre le pivot
-                textRect.offsetMin = new Vector2(5, 5);  // Padding intérieur
-                textRect.offsetMax = new Vector2(-5, -5); // Padding intérieur
             }
 
-            // Ajoute un bouton pour afficher les items
+            // Ajouter un événement pour afficher les items
             int index = i;
             tab.GetComponent<Button>().onClick.AddListener(() => ShowItems(index));
             tabs[i] = tab;
@@ -80,19 +90,17 @@ public class BlackHole : MonoBehaviour
         }
     }
 
-
-
-
     private void GenerateItemsForTab(int tabIndex)
     {
-        items[tabIndex] = new GameObject[itemsPerTab];
+        int itemCount = itemsPerTab[tabIndex]; // Récupère le nombre aléatoire d'items pour cet onglet
+        items[tabIndex] = new GameObject[itemCount];
 
         // Calcul dynamique de la taille des items
-        int itemsPerRow = Mathf.CeilToInt(Mathf.Sqrt(itemsPerTab));
+        int itemsPerRow = Mathf.CeilToInt(Mathf.Sqrt(itemCount));
         float itemWidth = itemsPanel.rect.width / itemsPerRow;
         float itemHeight = itemsPanel.rect.height / itemsPerRow;
 
-        for (int i = 0; i < itemsPerTab; i++)
+        for (int i = 0; i < itemCount; i++)
         {
             // Créer un nouvel item
             GameObject item = Instantiate(itemPrefab, itemsPanel);
@@ -107,11 +115,28 @@ public class BlackHole : MonoBehaviour
             itemRect.anchorMax = new Vector2(0, 1);
             itemRect.pivot = new Vector2(0, 1);
 
-            // Configurer le texte
-            item.GetComponentInChildren<TextMeshProUGUI>().text = $"Item {i + 1 + tabIndex * itemsPerTab}";
+            // Activer aléatoirement un enfant
+            ActivateRandomChild(item);
 
             items[tabIndex][i] = item;
             item.SetActive(false); // Cache tous les items au début
+        }
+    }
+
+    private void ActivateRandomChild(GameObject item)
+    {
+        int childCount = item.transform.childCount;
+        if (childCount > 0)
+        {
+            // Désactiver tous les enfants
+            foreach (Transform child in item.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            // Activer un enfant aléatoirement
+            int randomIndex = Random.Range(0, childCount);
+            item.transform.GetChild(randomIndex).gameObject.SetActive(true);
         }
     }
 
@@ -120,6 +145,8 @@ public class BlackHole : MonoBehaviour
         // Masquer les items des autres onglets
         for (int i = 0; i < numberOfTabs; i++)
         {
+            if (items[i] == null) continue;
+
             foreach (var item in items[i])
             {
                 item.SetActive(false);
@@ -127,9 +154,37 @@ public class BlackHole : MonoBehaviour
         }
 
         // Afficher les items de l'onglet sélectionné
-        foreach (var item in items[tabIndex])
+        if (items[tabIndex] != null)
         {
-            item.SetActive(true);
+            foreach (var item in items[tabIndex])
+            {
+                item.SetActive(true);
+            }
+        }
+    }
+
+    private void ClearOldTabsAndItems()
+    {
+        // Supprime tous les anciens onglets
+        if (tabs != null)
+        {
+            foreach (var tab in tabs)
+            {
+                Destroy(tab);
+            }
+        }
+
+        // Supprime tous les anciens items
+        if (items != null)
+        {
+            foreach (var itemArray in items)
+            {
+                if (itemArray == null) continue;
+                foreach (var item in itemArray)
+                {
+                    Destroy(item);
+                }
+            }
         }
     }
 }

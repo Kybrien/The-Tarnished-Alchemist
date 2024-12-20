@@ -191,7 +191,10 @@ public class CameraController: MonoBehaviour
                     }
                     if (hit.collider.CompareTag("BlackHole"))
                     {
-                        Debug.Log("BlackHole");
+                        Debug.Log("BlackHole detected");
+
+                        // Appel de la fonction pour régénérer le contenu du BlackHole
+                        BlackHole blackHoleScript = blackHoleCanvas.GetComponent<BlackHole>();
                         ToggleBlackHole(true);
                     }
                     else if (target.CompareTag("HoldableObject"))
