@@ -18,18 +18,12 @@ public class BlackHole : MonoBehaviour
     public int minItemsPerTab = 3;       // Minimum d'items par onglet
     public int maxItemsPerTab = 12;      // Maximum d'items par onglet
 
-    private int numberOfTabs;            // Nombre d'onglets généré aléatoirement
+    private int numberOfTabs;
     private int[] itemsPerTab;           // Tableau pour stocker le nombre d'items par onglet
     private GameObject[] tabs;           // Références aux onglets
     private GameObject[][] items;        // Références aux items par onglet
 
     private void OnEnable()
-    {
-        // Appelé à chaque ouverture du Canvas
-        GenerateRandomTabsAndItems();
-    }
-
-    private void GenerateRandomTabsAndItems()
     {
         // Détermine aléatoirement le nombre d'onglets
         numberOfTabs = Random.Range(minTabs, maxTabs + 1);
@@ -48,7 +42,13 @@ public class BlackHole : MonoBehaviour
     private void GenerateTabs()
     {
         // Supprime les anciens onglets et items si nécessaire
-        ClearOldTabsAndItems();
+        if (tabs != null)
+        {
+            foreach (var tab in tabs)
+            {
+                Destroy(tab);
+            }
+        }
 
         tabs = new GameObject[numberOfTabs];
         items = new GameObject[numberOfTabs][];
@@ -115,6 +115,9 @@ public class BlackHole : MonoBehaviour
             itemRect.anchorMax = new Vector2(0, 1);
             itemRect.pivot = new Vector2(0, 1);
 
+            // Configurer le texte
+            item.GetComponentInChildren<TextMeshProUGUI>().text = $"Item {i + 1}";
+
             // Activer aléatoirement un enfant
             ActivateRandomChild(item);
 
@@ -159,31 +162,6 @@ public class BlackHole : MonoBehaviour
             foreach (var item in items[tabIndex])
             {
                 item.SetActive(true);
-            }
-        }
-    }
-
-    private void ClearOldTabsAndItems()
-    {
-        // Supprime tous les anciens onglets
-        if (tabs != null)
-        {
-            foreach (var tab in tabs)
-            {
-                Destroy(tab);
-            }
-        }
-
-        // Supprime tous les anciens items
-        if (items != null)
-        {
-            foreach (var itemArray in items)
-            {
-                if (itemArray == null) continue;
-                foreach (var item in itemArray)
-                {
-                    Destroy(item);
-                }
             }
         }
     }
