@@ -1,7 +1,9 @@
 using UnityEngine;
+using TMPro;
 
 public class PageManager : MonoBehaviour
 {
+    [Header("Pages et Navigation")]
     public GameObject[] pages; // Liste des pages (Canvas)
     public int currentIndex = 0; // Index de la page actuelle
     public Camera mainCamera; // Caméra pour le raycast
@@ -16,9 +18,17 @@ public class PageManager : MonoBehaviour
     private int targetIndex = -1; // L'index de la page à atteindre après l'animation
     private bool isTransitioning = false; // Indique si une transition est en cours
 
+    [Header("Gestion des Recettes")]
+    public GameObject addRecipeButton;         // Bouton Ajouter Une Recette
+    public GameObject validationButton;       // Bouton Valider
+    public TMP_InputField inputTitle;         // Champ pour entrer le titre
+    public GameObject recipeInputPanel;       // Panel contenant les champs d'entrée
+    public TextMeshProUGUI[] recipeSlots;     // Liste des slots pour afficher les titres des recettes
+
     private void Start()
     {
         UpdatePage();
+        //recipeInputPanel.SetActive(true); // Désactiver le panel d'entrée au départ
     }
 
     private void Update()
@@ -99,5 +109,61 @@ public class PageManager : MonoBehaviour
         // Gère l'état des boutons
         buttonPrevious.SetActive(currentIndex > 0);
         buttonNext.SetActive(currentIndex < pages.Length - 1);
+    }
+
+    // --- Ajout de la gestion des recettes ---
+    public void OnAddRecipeButtonClicked()
+    {
+        Debug.Log("Bouton Ajouter Une Recette cliqué.");
+
+        // Vérifie si le panel et le bouton sont correctement assignés
+        if (addRecipeButton == null || recipeInputPanel == null)
+        {
+            Debug.LogError("addRecipeButton ou recipeInputPanel n'est pas assigné !");
+            return;
+        }
+
+        // Désactiver le bouton Ajouter Une Recette et activer les champs d'entrée
+        addRecipeButton.SetActive(false);
+        recipeInputPanel.SetActive(true);
+
+        Debug.Log("Panel d'entrée activé.");
+    }
+
+
+    public void OnValidationButtonClicked()
+    {
+        // Récupérer les valeurs des champs d'entrée
+        string title = inputTitle.text;
+
+        if (string.IsNullOrEmpty(title))
+        {
+            Debug.LogWarning("Le titre est vide.");
+            return;
+        }
+
+        // Remplacer la première slot vide disponible
+        bool slotFound = false;
+        for (int i = 0; i < recipeSlots.Length; i++)
+        {
+            if (string.IsNullOrEmpty(recipeSlots[i].text))
+            {
+                recipeSlots[i].text = title; // Met à jour le titre
+                slotFound = true;
+                break;
+            }
+        }
+
+        if (!slotFound)
+        {
+            Debug.LogWarning("Toutes les slots sont déjà remplies.");
+        }
+
+        // Réinitialiser les champs d'entrée
+        inputTitle.text = "";
+
+        // Désactiver le panel d'entrée et réactiver le bouton Ajouter Une Recette
+        recipeInputPanel.SetActive(false);
+        addRecipeButton.SetActive(true);
     }
 }

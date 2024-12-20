@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 1030974145}
   - component: {fileID: 1030974147}
   - component: {fileID: 1030974148}
-  - component: {fileID: 2084136194196756445}
   m_Layer: 0
   m_Name: SM_Teacher_Sink
   m_TagString: Untagged
@@ -192,24 +191,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.028022, y: 0.189812, z: 0.029164}
   m_Center: {x: -0, y: 0.31926, z: -0.203121}
---- !u!114 &2084136194196756445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030974090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 0.26779994, g: 0.5655664, b: 0.9622642, a: 1}
-  outlineWidth: 4
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &1030974096
 GameObject:
   m_ObjectHideFlags: 0

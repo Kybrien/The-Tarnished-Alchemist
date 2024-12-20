@@ -74,6 +74,15 @@ public class CameraController: MonoBehaviour
         {
             ToggleBlackHole(false);
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleAllOutlines(true); // Active tous les outlines
+        }
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            ToggleAllOutlines(false); // Désactive tous les outlines
+        }
     }
 
     void ToggleInventory()
@@ -192,9 +201,6 @@ public class CameraController: MonoBehaviour
                     if (hit.collider.CompareTag("BlackHole"))
                     {
                         Debug.Log("BlackHole detected");
-
-                        // Appel de la fonction pour régénérer le contenu du BlackHole
-                        BlackHole blackHoleScript = blackHoleCanvas.GetComponent<BlackHole>();
                         ToggleBlackHole(true);
                     }
                     else if (target.CompareTag("HoldableObject"))
@@ -502,4 +508,18 @@ public class CameraController: MonoBehaviour
         // Active ou désactive les contrôles du joueur
         SetPlayerControls(!isOpen);
     }
+
+    void ToggleAllOutlines(bool isActive)
+    {
+        // Trouve tous les objets ayant un composant Outline
+        Outline[] allOutlines = FindObjectsOfType<Outline>();
+
+        foreach (Outline outline in allOutlines)
+        {
+            outline.enabled = isActive;
+        }
+
+        Debug.Log(isActive ? "All outlines activated." : "All outlines deactivated.");
+    }
+
 }
