@@ -37,7 +37,9 @@ public class CameraController: MonoBehaviour
 
     private bool isInventoryOpen = false; // État d'ouverture de l'inventaire
 
-    
+    [Header("BlackMarket Settings")]
+    public GameObject blackMarketCanvas;
+    private bool isBlackMarketOpen = false; // État du menu
 
     void Start()
     {
@@ -55,6 +57,11 @@ public class CameraController: MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleInventory();
+        }
+
+        if (isBlackMarketOpen && (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape)))
+        {
+            ToggleBlackMarket(false);
         }
     }
 
@@ -83,7 +90,7 @@ public class CameraController: MonoBehaviour
                     DisableOutline(currentHoveredObject);
                 }
 
-                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) || target.CompareTag("Mixer") || target.CompareTag("Spoon") &&
+                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) || target.CompareTag("Mixer") || target.CompareTag("Spoon") || target.CompareTag("TVMan") &&
                     target != heldObjLeft && target != heldObjRight)
                 {
                     EnableOutline(target);
@@ -165,6 +172,11 @@ public class CameraController: MonoBehaviour
                         {
                             Debug.LogWarning("L'objet avec le tag Spoon n'a pas de script Spoon attaché !");
                         }
+                    }
+                    if (hit.collider.CompareTag("TVMan"))
+                    {
+                        Debug.Log("Black Market PNJ detected");
+                        ToggleBlackMarket(true);
                     }
                     else if (target.CompareTag("HoldableObject"))
                     {
@@ -444,5 +456,18 @@ public class CameraController: MonoBehaviour
             canDropLeft = true;
             canDropRight = true;
         }
+    }
+
+    private void ToggleBlackMarket(bool isOpen)
+    {
+        isBlackMarketOpen = isOpen;
+        blackMarketCanvas.SetActive(isOpen);
+
+        // Verrouille ou libère le curseur
+        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isOpen;
+
+        // Active ou désactive les contrôles du joueur
+        SetPlayerControls(!isOpen);
     }
 }
