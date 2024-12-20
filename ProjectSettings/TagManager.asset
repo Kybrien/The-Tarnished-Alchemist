@@ -8,6 +8,7 @@ TagManager:
   - PrimaryElement
   - Mixer
   - Spoon
+  - TVMan
   layers:
   - Default
   - TransparentFX
