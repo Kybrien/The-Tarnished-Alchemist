@@ -9,6 +9,7 @@ TagManager:
   - Mixer
   - Spoon
   - TVMan
+  - BlackHole
   layers:
   - Default
   - TransparentFX

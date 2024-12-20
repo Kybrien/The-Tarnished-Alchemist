@@ -25,10 +25,14 @@ public class CameraController: MonoBehaviour
     private int LayerNumber;
 
     private GameObject currentHoveredObject = null; // Objet actuellement "hovered"
-
+    
     // UI Elements for hands
     public GameObject leftHandElements;
     public GameObject rightHandElements;
+
+    [Header("BlackHole Settings")]
+    public GameObject blackHoleCanvas;
+    private bool isBlackHoleOpen = false; // État du menu
 
     #region Animation Holding
     public Animator animatorLeftHand;
@@ -40,6 +44,8 @@ public class CameraController: MonoBehaviour
     [Header("BlackMarket Settings")]
     public GameObject blackMarketCanvas;
     private bool isBlackMarketOpen = false; // État du menu
+
+    
 
     void Start()
     {
@@ -62,6 +68,11 @@ public class CameraController: MonoBehaviour
         if (isBlackMarketOpen && (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape)))
         {
             ToggleBlackMarket(false);
+        }
+
+        if (isBlackHoleOpen && (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape)))
+        {
+            ToggleBlackHole(false);
         }
     }
 
@@ -90,7 +101,7 @@ public class CameraController: MonoBehaviour
                     DisableOutline(currentHoveredObject);
                 }
 
-                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) || target.CompareTag("Mixer") || target.CompareTag("Spoon") || target.CompareTag("TVMan") &&
+                if ((target.CompareTag("HoldableObject") || target.CompareTag("PrimaryElement")) || target.CompareTag("Mixer") || target.CompareTag("Spoon") || target.CompareTag("TVMan") || target.CompareTag("BlackHole") &&
                     target != heldObjLeft && target != heldObjRight)
                 {
                     EnableOutline(target);
@@ -177,6 +188,11 @@ public class CameraController: MonoBehaviour
                     {
                         Debug.Log("Black Market PNJ detected");
                         ToggleBlackMarket(true);
+                    }
+                    if (hit.collider.CompareTag("BlackHole"))
+                    {
+                        Debug.Log("BlackHole");
+                        ToggleBlackHole(true);
                     }
                     else if (target.CompareTag("HoldableObject"))
                     {
@@ -462,6 +478,19 @@ public class CameraController: MonoBehaviour
     {
         isBlackMarketOpen = isOpen;
         blackMarketCanvas.SetActive(isOpen);
+
+        // Verrouille ou libère le curseur
+        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isOpen;
+
+        // Active ou désactive les contrôles du joueur
+        SetPlayerControls(!isOpen);
+    }
+
+    private void ToggleBlackHole(bool isOpen)
+    {
+        isBlackHoleOpen = isOpen;
+        blackHoleCanvas.SetActive(isOpen);
 
         // Verrouille ou libère le curseur
         Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
