@@ -18,7 +18,7 @@ namespace LiquidVolumeFX {
 
 								void OnParticleCollision (GameObject other) {
 												if (lv.level < 1f) {
-																lv.level += fillSpeed;
+																lv.level += fillSpeed/1000;
 												}
 												UpdateColliderPos ();
 								}

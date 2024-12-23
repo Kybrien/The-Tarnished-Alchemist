@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31717d64588730e4fa2ddeb334c00361, type: 3}
+  m_Name: Elements
+  m_EditorClassIdentifier: 
+  elements:
+  - elementName: Eau
+    element3D: {fileID: 5389308499868243682, guid: 2808062aa04f85641855100bd997eb33,
+      type: 3}
+    elementUI: {fileID: 1153736564986795970, guid: 1dea9c275360d384dbc14256567ad56a,
+      type: 3}
+  - elementName: Lave
+    element3D: {fileID: 8128036605330585129, guid: 926f16c7e3e553c41800518c9de90934,
+      type: 3}
+    elementUI: {fileID: 7719979433713800624, guid: 4a25049709e089d4dae8c97089773cfd,
+      type: 3}
+  - elementName: SangDeRoi
+    element3D: {fileID: 3981840083553491634, guid: 9c2dca6d559ba6a47956327c490c1f4a,
+      type: 3}
+    elementUI: {fileID: 8916788289217965616, guid: 0c2e9f0c47943f0408588b8e6984c20b,
+      type: 3}
+  - elementName: Gadou
+    element3D: {fileID: 8987244782806931169, guid: 97367427172d9f64b928a3055c7626a4,
+      type: 3}
+    elementUI: {fileID: 5915210011055836196, guid: d33f31db47b63f245b0246fc0da9d51d,
+      type: 3}
